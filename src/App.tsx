@@ -72,7 +72,7 @@ function App() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-3xl font-bold underline">equalize</h1>
+      <h1 className="text-3xl font-bold underline">equal share</h1>
       <div className="flex flex-col gap-4">
         {contributors.map((payer) => (
           <ContributorCard
