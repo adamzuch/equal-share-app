@@ -1,6 +1,15 @@
-import { Payer } from '../App'
+export type Contributor = {
+  id: number
+  name: string
+  contributions: Contribution[]
+}
 
-export function refresh(payers: Payer[]) {
+export type Contribution = {
+  id: number
+  amount: number | null
+}
+
+export function refresh(payers: Contributor[]) {
   // don't need to calculate payments when there is less than two people.
   if (payers.length < 2) return []
 
@@ -49,12 +58,12 @@ function determinePayments(balances: [string, number][]) {
   return results
 }
 
-function getBalances(payers: Payer[]) {
+function getBalances(payers: Contributor[]) {
   // pre-process state to get array of payment sums as well as sum of all payments.
   const totals = []
   let total = 0
   for (const payer of payers) {
-    const payments = payer.payments
+    const payments = payer.contributions
       .filter((payment) => payment.amount !== null && !isNaN(payment.amount))
       .map((payment) => {
         return payment.amount

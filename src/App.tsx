@@ -1,77 +1,69 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+
 import { refresh } from './lib/equalize'
+import { ContributorCard } from './components/ContributorCard'
 
-export type Payer = {
-  id: number
-  name: string
-  payments: Payment[]
-}
-
-export type Payment = {
-  id: number
-  amount: number | null
-}
+import { Contribution, Contributor } from './lib/equalize'
 
 function App() {
-  const [payers, setPayers] = useState<Payer[]>([
+  const [contributors, setContributors] = useState<Contributor[]>([
     {
       id: 0,
       name: 'John Doe',
-      payments: [{ id: 0, amount: 5.3 }],
+      contributions: [{ id: 0, amount: 5.3 }],
     },
   ])
 
-  const results = refresh(payers)
+  const results = refresh(contributors)
 
-  console.log(...payers)
+  console.log(...contributors)
 
   console.log('calculated: ', results)
 
-  const updatePayerName = (payer: Payer, newName: string) => {
-    setPayers(
-      payers.map((p) => (p.id === payer.id ? { ...p, name: newName } : p))
+  const updateContributorName = (payer: Contributor, nameText: string) => {
+    setContributors(
+      contributors.map((p) =>
+        p.id === payer.id ? { ...p, name: nameText } : p
+      )
     )
   }
 
-  const handlePayerPaymentAmountChange = (
-    payer: Payer,
-    payment: Payment,
-    inputText: string
+  const updateContributionAmount = (
+    contributor: Contributor,
+    contribution: Contribution,
+    amountText: string
   ) => {
-    const newAmount = parseFloat(inputText)
-    if (inputText === '') {
-      updatePayerPayment(payer, payment, null)
+    const amountFloat = parseFloat(amountText)
+    let newAmount: number | null = null
+    if (amountText !== '' && !isNaN(amountFloat)) {
+      newAmount = amountFloat
     }
-    if (!isNaN(newAmount)) {
-      updatePayerPayment(payer, payment, newAmount)
-    }
-  }
-
-  const updatePayerPayment = (
-    payer: Payer,
-    payment: Payment,
-    newAmount: number | null
-  ) => {
-    const payments = payer.payments.map((p) =>
-      p.id === payment.id ? { ...p, amount: newAmount } : p
+    const contributions = contributor.contributions.map((p) =>
+      p.id === contribution.id ? { ...p, amount: newAmount } : p
     )
-    setPayers(payers.map((p) => (p.id === payer.id ? { ...p, payments } : p)))
+    setContributors(
+      contributors.map((p) =>
+        p.id === contributor.id ? { ...p, contributions } : p
+      )
+    )
   }
 
-  const createPayer = () => {
-    setPayers(payers.concat([{ id: Math.random(), name: '', payments: [] }]))
+  const addContributor = () => {
+    setContributors(
+      contributors.concat([{ id: Math.random(), name: '', contributions: [] }])
+    )
   }
 
-  const createPayment = (payer: Payer) => {
-    setPayers(
-      payers.map((p) =>
+  const addContribution = (payer: Contributor) => {
+    setContributors(
+      contributors.map((p) =>
         p.id === payer.id
           ? {
               ...p,
-              payments: p.payments.concat({ id: Math.random(), amount: null }),
+              contributions: p.contributions.concat({
+                id: Math.random(),
+                amount: null,
+              }),
             }
           : p
       )
@@ -80,81 +72,23 @@ function App() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex justify-center">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1 className="text-3xl font-bold underline">Vite + React</h1>
-      <div className="flex flex-col">
-        {payers.map((payer) => (
-          <div>
-            <input
-              key={payer.id}
-              className="border border-gray-500"
-              type="text"
-              value={payer.name}
-              placeholder="Enter your name"
-              onChange={(e) => updatePayerName(payer, e.target.value)}
-            />
-            <div>Payments</div>
-            <div className="flex flex-col">
-              {payer.payments.map((payment) =>
-                payment.amount !== null ? (
-                  <input
-                    key={payment.id}
-                    className="border border-gray-500"
-                    type="number"
-                    min="0"
-                    step="any"
-                    value={payment.amount}
-                    placeholder="Enter a payment"
-                    onChange={(e) => {
-                      handlePayerPaymentAmountChange(
-                        payer,
-                        payment,
-                        e.target.value
-                      )
-                    }}
-                  />
-                ) : (
-                  <input
-                    key={payment.id}
-                    className="border border-gray-500"
-                    type="text"
-                    value={''}
-                    placeholder="Enter a payment"
-                    onChange={(e) => {
-                      handlePayerPaymentAmountChange(
-                        payer,
-                        payment,
-                        e.target.value
-                      )
-                    }}
-                  />
-                )
-              )}
-            </div>
-            <div>
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                onClick={() => createPayment(payer)}
-              >
-                Add payment +
-              </button>
-            </div>
-          </div>
+      <h1 className="text-3xl font-bold underline">equalize</h1>
+      <div className="flex flex-col gap-4">
+        {contributors.map((payer) => (
+          <ContributorCard
+            contributor={payer}
+            onAddContributionClick={addContribution}
+            onContributorNameChange={updateContributorName}
+            onContributionAmountChange={updateContributionAmount}
+          />
         ))}
       </div>
       <div>
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={createPayer}
+          onClick={addContributor}
         >
-          Add payer +
+          Add contributor
         </button>
       </div>
 
