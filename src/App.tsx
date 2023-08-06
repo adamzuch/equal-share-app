@@ -2,14 +2,15 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { refresh } from './lib/equalize'
 
-type Payer = {
+export type Payer = {
   id: number
   name: string
   payments: Payment[]
 }
 
-type Payment = {
+export type Payment = {
   id: number
   amount: number | null
 }
@@ -23,7 +24,11 @@ function App() {
     },
   ])
 
+  const results = refresh(payers)
+
   console.log(...payers)
+
+  console.log('calculated: ', results)
 
   const updatePayerName = (payer: Payer, newName: string) => {
     setPayers(
@@ -151,6 +156,14 @@ function App() {
         >
           Add payer +
         </button>
+      </div>
+
+      <div>
+        {results.map((result) => (
+          <div>
+            {result.debtor} owes {result.creditor} {result.value}
+          </div>
+        ))}
       </div>
     </div>
   )
