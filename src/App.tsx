@@ -78,8 +78,12 @@ function App() {
   }
 
   return (
-    <div className="flex bg-gray-50 flex-col items-center gap-4">
+    <div className="p-8 flex bg-gray-50 flex-col items-center gap-8">
       <h1 className="text-3xl font-poppins ">equal share</h1>
+
+      <div>
+        <Button onClick={addContributor}>Add contributor</Button>
+      </div>
 
       <div className="flex flex-row gap-8">
         {contributors.map((payer) => (
@@ -90,9 +94,6 @@ function App() {
             onContributionAmountChange={updateContributionAmount}
           />
         ))}
-      </div>
-      <div>
-        <Button onClick={addContributor}>Add contributor</Button>
       </div>
 
       <div>
