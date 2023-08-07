@@ -4,6 +4,7 @@ import { refresh } from './lib/equalize'
 import { ContributorCard } from './components/ContributorCard'
 
 import { Contribution, Contributor } from './lib/equalize'
+import { Button } from './components/Button'
 
 function App() {
   const [contributors, setContributors] = useState<Contributor[]>([
@@ -50,7 +51,13 @@ function App() {
 
   const addContributor = () => {
     setContributors(
-      contributors.concat([{ id: Math.random(), name: '', contributions: [] }])
+      contributors.concat([
+        {
+          id: Math.random(),
+          name: '',
+          contributions: [{ id: 0, amount: null }],
+        },
+      ])
     )
   }
 
@@ -71,9 +78,10 @@ function App() {
   }
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-3xl font-bold underline">equal share</h1>
-      <div className="flex flex-col gap-4">
+    <div className="flex bg-gray-50 flex-col items-center gap-4">
+      <h1 className="text-3xl font-poppins ">equal share</h1>
+
+      <div className="flex flex-row gap-8">
         {contributors.map((payer) => (
           <ContributorCard
             contributor={payer}
@@ -84,12 +92,7 @@ function App() {
         ))}
       </div>
       <div>
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={addContributor}
-        >
-          Add contributor
-        </button>
+        <Button onClick={addContributor}>Add contributor</Button>
       </div>
 
       <div>
