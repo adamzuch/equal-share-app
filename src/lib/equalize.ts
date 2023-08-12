@@ -1,12 +1,19 @@
-export type Contributor = {
-  id: number
-  name: string
-  contributions: Contribution[]
-}
-
 export type Contribution = {
   id: number
   amount: number | null
+  contributor: Contributor
+}
+
+export type Contributor = {
+  id: number
+  name: string
+}
+
+export type Repayment = {
+  id: number
+  creditor: number
+  debtor: number
+  amount: number
 }
 
 export function refresh(payers: Contributor[]) {
@@ -18,10 +25,84 @@ export function refresh(payers: Contributor[]) {
   return results
 }
 
+export function equalize(
+  contributions: Contribution[],
+  contributors: Map<number, Contributor>
+) {
+  if (contributors.size < 2) return null
+
+  const total = contributions.reduce((a, b) => a + (b.amount ?? 0), 0)
+  const targetContribution = total / contributors.size
+
+  const contributorTotals = calculateContributorTotals(contributions)
+  const contributorBalances = calculateContributorBalances(
+    contributorTotals,
+    targetContribution
+  )
+
+  const repayments: any[] = []
+
+  let repaymentsCount = 0
+  while (contributorBalances.length > 1) {
+    const [id1, balance1] = contributorBalances[0]
+
+    const i = contributorBalances.findIndex(([id, balance]) => {
+      return id1 !== id && !isSameSign(balance1, balance)
+    })!
+
+    const [id2, balance2] = contributorBalances[i]
+
+    const paymentAmount = Math.min(Math.abs(balance1), Math.abs(balance2))
+
+    contributorBalances[0][1] += paymentAmount * (balance1 > 0 ? -1 : 1)
+    contributorBalances[i][1] += paymentAmount * (balance2 > 0 ? -1 : 1)
+
+    // record transaction
+    repayments.push({
+      id: repaymentsCount++,
+      creditorId: balance1 > 0 ? id1 : id2,
+      debtorId: balance1 > 0 ? id2 : id1,
+      amount: paymentAmount,
+    })
+
+    // delete balances which have been resolved (i.e. ~0)
+    contributorBalances.filter(([, balance]) => !isCloseToZero(balance))
+  }
+
+  return {
+    contributorTotals,
+    targetContribution,
+    total,
+    repayments,
+  }
+}
+
+function calculateContributorTotals(contributions: Contribution[]) {
+  const contributorTotals = new Map<number, number>()
+  for (const { contributor, ...contribution } of contributions) {
+    if (contribution.amount !== null) {
+      const total = contributorTotals.get(contributor.id) ?? 0
+      contributorTotals.set(contributor.id, total + contribution.amount)
+    }
+  }
+  return contributorTotals
+}
+
+function calculateContributorBalances(
+  contributorAmounts: Map<number, number>,
+  equalAmount: number
+) {
+  const contributorBalances: [number, number][] = []
+  for (const [contributorId, contributorAmount] of contributorAmounts) {
+    contributorBalances.push([contributorId, contributorAmount - equalAmount])
+  }
+  return contributorBalances
+}
+
 function determinePayments(balances: [string, number][]) {
   const results = []
 
-  while (balances.length > 1 && !withinError(balances[0][1])) {
+  while (balances.length > 1 && !isCloseToZero(balances[0][1])) {
     const [currentName, currentBalance] = balances[0]
 
     // find another balance with different polarity to exchange with
@@ -30,10 +111,7 @@ function determinePayments(balances: [string, number][]) {
     do {
       i += 1
       ;[otherName, otherBalance] = balances[i]
-    } while (
-      i < balances.length &&
-      hasSamePolarity(currentBalance, otherBalance)
-    )
+    } while (i < balances.length && isSameSign(currentBalance, otherBalance))
 
     // do transaction
     const paymentAmount = Math.min(
@@ -52,8 +130,10 @@ function determinePayments(balances: [string, number][]) {
     })
 
     // delete balances which have been resolved (i.e. ~0)
-    if (withinError(balances[i][1])) balances = deleteObjectInArray(balances, i)
-    if (withinError(balances[0][1])) balances = deleteObjectInArray(balances, 0)
+    if (isCloseToZero(balances[i][1]))
+      balances = deleteObjectInArray(balances, i)
+    if (isCloseToZero(balances[0][1]))
+      balances = deleteObjectInArray(balances, 0)
   }
   return results
 }
@@ -80,15 +160,13 @@ function getBalances(payers: Contributor[]) {
     person.name,
     person.total - contribution,
   ])
-  return balances.filter(([, balance]) => !withinError(balance))
+  return balances.filter(([, balance]) => !isCloseToZero(balance))
 }
 
+const isCloseToZero = (value: number) => Math.abs(value) < 0.01
+const isSameSign = (x: number, y: number) => XNOR(x > 0, y > 0)
+
+const XNOR = (a: boolean, b: boolean) => (a && b) || (!a && !b)
 const deleteObjectInArray = <T>(arr: T[], i: number) => {
   return Array.prototype.concat(arr.slice(0, i), arr.slice(i + 1))
 }
-
-const hasSamePolarity = (x: number, y: number) => XNOR(x > 0, y > 0)
-
-const XNOR = (a: boolean, b: boolean) => (a && b) || (!a && !b)
-
-const withinError = (value: number) => Math.abs(value) < 0.01

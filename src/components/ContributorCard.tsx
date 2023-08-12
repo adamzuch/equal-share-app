@@ -20,7 +20,7 @@ export function ContributorCard({
 }) {
   const { id, name, contributions } = contributor
   return (
-    <div className="font-poppins w-fit">
+    <div className="font-atkinson w-fit">
       <div className="w-96 flex flex-col gap-4">
         <input
           key={id}
