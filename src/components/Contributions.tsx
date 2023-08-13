@@ -1,6 +1,8 @@
 import clsx from 'clsx'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+
 import { Contribution } from '../lib/equalize'
-import { Button } from './Button'
 
 export function Contributions({
   contributions,
@@ -8,12 +10,14 @@ export function Contributions({
   onAmountChange,
   onContributorChange,
   onDelete,
+  onDescriptionChange,
   onNewContribution,
 }: {
   contributions: Contribution[]
   contributors: string[]
   onAmountChange?: (i: number, value: string) => void
   onContributorChange?: (i: number, value: string) => void
+  onDescriptionChange?: (i: number, value: string) => void
   onDelete?: (i: number) => void
   onNewContribution?: (contribution: Contribution) => void
 }) {
@@ -50,13 +54,22 @@ export function Contributions({
             placeholder="Enter a name"
           />
 
-          <Button
+          <input
+            className={clsx(
+              'placeholder:text-gray-300 w-full block px-2 py-1 border-0 ring-1 ring-inset ring-gray-200 focus:z-10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-400'
+            )}
+            type="text"
+            value={contribution.description}
+            onChange={(e) => onDescriptionChange?.(i, e.target.value)}
+            placeholder="Enter a description"
+          />
+
+          <button
             className={clsx('rounded-none', i === 0 ? 'rounded-tr-lg' : '')}
             onClick={() => onDelete?.(i)}
-            type="submit"
           >
-            -
-          </Button>
+            <FontAwesomeIcon className="w-4 h-4 text-red-800" icon={faTrash} />
+          </button>
         </div>
       ))}
 
@@ -68,8 +81,9 @@ export function Contributions({
           const formData = new FormData(form)
           const amount = Number(formData.get('amount'))
           const contributor = String(formData.get('name'))
+          const description = String(formData.get('description'))
 
-          const contribution = { amount, contributor }
+          const contribution = { amount, contributor, description }
 
           onNewContribution?.(contribution)
 
@@ -91,7 +105,7 @@ export function Contributions({
             min="0"
             step="any"
             name="amount"
-            defaultValue={''}
+            defaultValue=""
             placeholder="0"
           />
         </div>
@@ -105,7 +119,7 @@ export function Contributions({
             'placeholder:text-gray-300 w-full  block px-2 py-1 border-0 ring-1 ring-inset ring-gray-200 focus:z-10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-400'
           )}
           type="text"
-          defaultValue={''}
+          defaultValue=""
           name="name"
           placeholder="Enter a name"
         />
@@ -115,9 +129,20 @@ export function Contributions({
           ))}
         </datalist>
 
-        <Button className="rounded-none rounded-br-lg" type="submit">
-          -
-        </Button>
+        <input
+          id="new-description-input"
+          className={clsx(
+            'placeholder:text-gray-300 w-full block px-2 py-1 border-0 ring-1 ring-inset ring-gray-200 focus:z-10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-400'
+          )}
+          type="text"
+          defaultValue=""
+          name="description"
+          placeholder="Enter a description"
+        />
+
+        <button className="rounded-none rounded-br-lg" type="submit">
+          <FontAwesomeIcon className="w-4 h-4" icon={faPlus} />
+        </button>
       </form>
     </div>
   )

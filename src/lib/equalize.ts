@@ -1,6 +1,7 @@
 export type Contribution = {
   amount: number | null
   contributor: string
+  description: string
 }
 
 export type Repayment = {

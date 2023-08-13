@@ -5,9 +5,9 @@ import { Contributions } from './components/Contributions'
 import { Summary } from './components/Summary'
 
 const INITIAL_CONTRIBUTIONS: Contribution[] = [
-  { amount: 23, contributor: 'Adam' },
-  { amount: 7, contributor: 'Bill' },
-  { amount: 5, contributor: 'John' },
+  { amount: 23, contributor: 'Adam', description: '' },
+  { amount: 7, contributor: 'Bill', description: '' },
+  { amount: 5, contributor: 'John', description: '' },
 ]
 
 function App() {
@@ -39,6 +39,15 @@ function App() {
     ])
   }
 
+  const updateDescription = (i: number, value: string) => {
+    const updatedContribution = { ...contributions[i], description: value }
+    setContributions([
+      ...contributions.slice(0, i),
+      updatedContribution,
+      ...contributions.slice(i + 1),
+    ])
+  }
+
   const deleteContribution = (i: number) => {
     setContributions(contributions.filter((_, j) => i !== j))
   }
@@ -48,23 +57,29 @@ function App() {
   }
 
   return (
-    <div className="font-atkinson p-4 flex flex-col items-center gap-4">
-      <h1 className="text-3xl font-bold">equal share</h1>
+    <div className="h-screen w-scree flex flex-col items-center">
+      <div className="h-full max-w-3xl bg-gray-50 p-4 space-y-4">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold">equal share</h1>
+          <p className="text-base">
+            Enter payments to split equally, see instant results.
+          </p>
+        </div>
 
-      <p>Enter payments to split equally, see instant results.</p>
+        <Contributions
+          contributions={contributions}
+          contributors={contributors}
+          onAmountChange={updateAmount}
+          onContributorChange={updateContributor}
+          onDescriptionChange={updateDescription}
+          onDelete={deleteContribution}
+          onNewContribution={addContribution}
+        />
 
-      <Contributions
-        contributions={contributions}
-        contributors={contributors}
-        onAmountChange={updateAmount}
-        onContributorChange={updateContributor}
-        onDelete={deleteContribution}
-        onNewContribution={addContribution}
-      />
-
-      {calculated !== null ? (
-        <Summary contributors={contributors} {...calculated} />
-      ) : null}
+        {calculated !== null ? (
+          <Summary contributors={contributors} {...calculated} />
+        ) : null}
+      </div>
     </div>
   )
 }
