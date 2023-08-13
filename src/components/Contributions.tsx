@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faTurnUp, faXmark } from '@fortawesome/free-solid-svg-icons'
 
 import { Contribution } from '../lib/equalize'
 
@@ -22,9 +22,9 @@ export function Contributions({
   onNewContribution?: (contribution: Contribution) => void
 }) {
   return (
-    <div className="flex flex-col -space-y-px">
+    <div className="flex flex-col divide-y divide-black">
       {contributions.map((contribution, i) => (
-        <div key={i} className={clsx('flex -space-x-px')}>
+        <div key={i} className="flex">
           <div className="relative flex">
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 z-20">
               <span className="text-gray-500 sm:text-sm">$</span>
@@ -32,8 +32,7 @@ export function Contributions({
 
             <input
               className={clsx(
-                'placeholder:text-gray-300 pl-7 w-full block px-2 py-1 border-0 ring-1 ring-inset ring-gray-200 focus:z-10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-400',
-                i === 0 ? 'rounded-tl-lg' : ''
+                'w-28 placeholder:text-gray-300 pl-7 block px-2 py-1.5 border-0 focus:z-10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-400'
               )}
               type="number"
               min="0"
@@ -46,7 +45,7 @@ export function Contributions({
 
           <input
             className={clsx(
-              'placeholder:text-gray-300 w-full block px-2 py-1 border-0 ring-1 ring-inset ring-gray-200 focus:z-10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-400'
+              'w-56 placeholder:text-gray-300 block px-2 py-1.5 border-0 focus:z-10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-400'
             )}
             type="text"
             value={contribution.contributor}
@@ -56,7 +55,7 @@ export function Contributions({
 
           <input
             className={clsx(
-              'placeholder:text-gray-300 w-full block px-2 py-1 border-0 ring-1 ring-inset ring-gray-200 focus:z-10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-400'
+              'placeholder:text-gray-300 w-full block px-2 py-1.5 border-0 focus:z-10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-400'
             )}
             type="text"
             value={contribution.description}
@@ -64,17 +63,21 @@ export function Contributions({
             placeholder="Enter a description"
           />
 
-          <button
-            className={clsx('rounded-none', i === 0 ? 'rounded-tr-lg' : '')}
-            onClick={() => onDelete?.(i)}
-          >
-            <FontAwesomeIcon className="w-4 h-4 text-red-800" icon={faTrash} />
-          </button>
+          {/* <button
+              className={clsx(
+                'rounded-none bg-red-700 text-white px-2 py-1 border-white',
+                i === 0 ? 'rounded-tr-lg' : 'border-t',
+                i === contributions.length - 1 ? 'rounded-br-lg' : ''
+              )}
+              onClick={() => onDelete?.(i)}
+            >
+              <FontAwesomeIcon className="w-4 h-4" icon={faXmark} />
+            </button> */}
         </div>
       ))}
 
       <form
-        className={clsx('flex -space-x-px')}
+        className="flex items-center space-between"
         onSubmit={(e) => {
           e.preventDefault()
           const form = e.target as HTMLFormElement
@@ -98,9 +101,7 @@ export function Contributions({
           <input
             required
             id="new-amount-input"
-            className={clsx(
-              'placeholder:text-gray-300 rounded-bl-lg pl-7 w-full block px-2 py-1 border-0 ring-1 ring-inset ring-gray-200 focus:z-10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-400'
-            )}
+            className="w-28 placeholder:text-gray-300 pl-7 block px-2 py-1.5 border-0 focus:z-10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-400"
             type="number"
             min="0"
             step="any"
@@ -116,7 +117,7 @@ export function Contributions({
           autoComplete="off"
           required
           className={clsx(
-            'placeholder:text-gray-300 w-full  block px-2 py-1 border-0 ring-1 ring-inset ring-gray-200 focus:z-10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-400'
+            'w-56 placeholder:text-gray-300 block px-2 py-1.5 border-0 focus:z-10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-400'
           )}
           type="text"
           defaultValue=""
@@ -132,7 +133,7 @@ export function Contributions({
         <input
           id="new-description-input"
           className={clsx(
-            'placeholder:text-gray-300 w-full block px-2 py-1 border-0 ring-1 ring-inset ring-gray-200 focus:z-10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-400'
+            'placeholder:text-gray-300 w-full block px-2 py-1.5 border-0 focus:z-10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-400'
           )}
           type="text"
           defaultValue=""
@@ -140,8 +141,11 @@ export function Contributions({
           placeholder="Enter a description"
         />
 
-        <button className="rounded-none rounded-br-lg" type="submit">
-          <FontAwesomeIcon className="w-4 h-4" icon={faPlus} />
+        <button
+          className="bg-indigo-700 text-white px-2 py-1.5 hidden"
+          type="submit"
+        >
+          Add
         </button>
       </form>
     </div>

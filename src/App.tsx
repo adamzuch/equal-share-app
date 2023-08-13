@@ -58,7 +58,7 @@ function App() {
 
   return (
     <div className="h-screen w-scree flex flex-col items-center">
-      <div className="h-full max-w-3xl bg-gray-50 p-4 space-y-4">
+      <div className="h-full max-w-3xl p-4 space-y-12">
         <div className="space-y-2">
           <h1 className="text-3xl font-bold">equal share</h1>
           <p className="text-base">
