@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { Button } from './components/Button'
+
 import clsx from 'clsx'
 
 import { Contribution, equalize } from './lib/equalize'
@@ -21,13 +22,38 @@ function App() {
     },
   ])
 
-  const contributors = [...new Set(contributions.map((c) => c.contributor))]
+  const contributors = [
+    ...new Set(contributions.map((c) => c.contributor).filter((c) => c !== '')),
+  ]
 
   console.log(...contributions)
 
-  const calculated = equalize(contributions)
+  const calculated = equalize(contributions, contributors)
 
   console.log(calculated)
+
+  const updateAmount = (i: number, value: string) => {
+    const amount = isNaN(Number(value)) ? null : Number(value)
+    const updatedContribution = { ...contributions[i], amount }
+    setContributions([
+      ...contributions.slice(0, i),
+      updatedContribution,
+      ...contributions.slice(i + 1),
+    ])
+  }
+
+  const updateContributor = (i: number, value: string) => {
+    const updatedContribution = { ...contributions[i], contributor: value }
+    setContributions([
+      ...contributions.slice(0, i),
+      updatedContribution,
+      ...contributions.slice(i + 1),
+    ])
+  }
+
+  const deleteContribution = (i: number) => {
+    setContributions(contributions.filter((_, j) => i !== j))
+  }
 
   return (
     <div className="font-atkinson p-4 flex flex-col items-center gap-4">
@@ -52,8 +78,8 @@ function App() {
                 min="0"
                 step="any"
                 value={contribution.amount ?? ''}
-                placeholder="0.00"
-                onChange={() => null}
+                placeholder="0"
+                onChange={(e) => updateAmount(i, e.target.value)}
               />
             </div>
 
@@ -63,12 +89,13 @@ function App() {
               )}
               type="text"
               value={contribution.contributor}
-              onChange={() => null}
+              onChange={(e) => updateContributor(i, e.target.value)}
               placeholder="Enter a name"
             />
 
             <Button
               className={clsx('rounded-none', i === 0 ? 'rounded-tr-lg' : '')}
+              onClick={() => deleteContribution(i)}
               type="submit"
             >
               -
@@ -140,8 +167,8 @@ function App() {
       {calculated !== null ? (
         <div className="flex flex-col gap-4">
           <p>
-            ${calculated.total} shared by {contributors.length} people equals $
-            {calculated.targetContribution} per person
+            ${calculated.total.toFixed(2)} shared by {contributors.length}{' '}
+            people equals ${calculated.targetContribution.toFixed(2)} per person
           </p>
 
           <div className="flex gap-4">

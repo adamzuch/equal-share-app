@@ -9,13 +9,14 @@ export type Repayment = {
   amount: number
 }
 
-export function equalize(contributions: Contribution[]) {
-  const contributors = new Set(contributions.map((c) => c.contributor))
-
-  if (contributors.size < 2) return null
+export function equalize(
+  contributions: Contribution[],
+  contributors: string[]
+) {
+  if (contributors.length < 2) return null
 
   const total = contributions.reduce((a, b) => a + (b.amount ?? 0), 0)
-  const targetContribution = total / contributors.size
+  const targetContribution = total / contributors.length
 
   const contributorTotals = calculateContributorTotals(contributions)
   const outstandingBalances = calculateContributorBalances(
