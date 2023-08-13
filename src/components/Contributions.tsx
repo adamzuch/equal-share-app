@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { Contribution } from '../lib/equalize'
 import { Button } from './Button'
 
-export function ContributionGrid({
+export function Contributions({
   contributions,
   contributors,
   onAmountChange,

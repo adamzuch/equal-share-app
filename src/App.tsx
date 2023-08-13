@@ -1,7 +1,8 @@
 import { useState } from 'react'
 
 import { Contribution, equalize } from './lib/equalize'
-import { ContributionGrid } from './components/ContributionGrid'
+import { Contributions } from './components/Contributions'
+import { Summary } from './components/Summary'
 
 const INITIAL_CONTRIBUTIONS: Contribution[] = [
   { amount: 23, contributor: 'Adam' },
@@ -11,15 +12,12 @@ const INITIAL_CONTRIBUTIONS: Contribution[] = [
 
 function App() {
   const [contributions, setContributions] = useState(INITIAL_CONTRIBUTIONS)
-
   const contributors = [
     ...new Set(contributions.map((c) => c.contributor).filter((c) => c !== '')),
   ]
-
-  console.log(...contributions)
-
   const calculated = equalize(contributions, contributors)
 
+  console.log(contributions)
   console.log(calculated)
 
   const updateAmount = (i: number, value: string) => {
@@ -55,7 +53,7 @@ function App() {
 
       <p>Enter payments to split equally, see instant results.</p>
 
-      <ContributionGrid
+      <Contributions
         contributions={contributions}
         contributors={contributors}
         onAmountChange={updateAmount}
@@ -65,45 +63,7 @@ function App() {
       />
 
       {calculated !== null ? (
-        <div className="flex flex-col gap-4">
-          <p>
-            ${calculated.total.toFixed(2)} shared by {contributors.length}{' '}
-            people equals ${calculated.targetContribution.toFixed(2)} per person
-          </p>
-
-          <div className="flex gap-4">
-            <div>
-              <div>Creditors</div>
-              {calculated.outstandingBalances
-                .filter(([, balance]) => balance > 0)
-                .map(([contributor, balance]) => (
-                  <div key={contributor}>
-                    {contributor} is owed ${balance.toFixed(2)}
-                  </div>
-                ))}
-            </div>
-            <div>
-              <div>Debtors</div>
-              {calculated.outstandingBalances
-                .filter(([, balance]) => balance < 0)
-                .map(([contributor, balance]) => (
-                  <div key={contributor}>
-                    {contributor} owes ${Math.abs(balance).toFixed(2)}
-                  </div>
-                ))}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-4">
-            {calculated.repayments.map(({ creditor, debtor, amount }, i) => (
-              <div className="p-2 bg-gray-100 rounded-lg" key={i}>
-                <div>
-                  {debtor} pays {creditor} ${amount.toFixed(2)}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <Summary contributors={contributors} {...calculated} />
       ) : null}
     </div>
   )

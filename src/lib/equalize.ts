@@ -65,7 +65,6 @@ export function equalize(
 
   return {
     outstandingBalances,
-    contributorTotals,
     targetContribution,
     total,
     repayments,
