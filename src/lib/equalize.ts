@@ -1,94 +1,99 @@
-export type Contributor = {
-  id: number
-  name: string
-  contributions: Contribution[]
-}
-
 export type Contribution = {
-  id: number
   amount: number | null
+  contributor: string
 }
 
-export function refresh(payers: Contributor[]) {
-  // don't need to calculate payments when there is less than two people.
-  if (payers.length < 2) return []
-
-  const balances = getBalances(payers)
-  const results = determinePayments(balances)
-  return results
+export type Repayment = {
+  creditor: string
+  debtor: string
+  amount: number
 }
 
-function determinePayments(balances: [string, number][]) {
-  const results = []
+export function equalize(
+  contributions: Contribution[],
+  contributors: string[]
+) {
+  if (contributors.length < 2) return null
 
-  while (balances.length > 1 && !withinError(balances[0][1])) {
-    const [currentName, currentBalance] = balances[0]
+  const total = contributions.reduce((a, b) => a + (b.amount ?? 0), 0)
+  const targetContribution = total / contributors.length
 
-    // find another balance with different polarity to exchange with
-    let i = 0
-    let [otherName, otherBalance] = balances[i]
-    do {
-      i += 1
-      ;[otherName, otherBalance] = balances[i]
-    } while (
-      i < balances.length &&
-      hasSamePolarity(currentBalance, otherBalance)
-    )
+  const contributorTotals = calculateContributorTotals(contributions)
+  const outstandingBalances = calculateContributorBalances(
+    contributorTotals,
+    targetContribution
+  )
 
-    // do transaction
-    const paymentAmount = Math.min(
-      Math.abs(currentBalance),
-      Math.abs(otherBalance)
-    )
-    balances[0][1] += paymentAmount * (currentBalance > 0 ? -1 : 1)
-    balances[i][1] += paymentAmount * (otherBalance > 0 ? -1 : 1)
+  const repayments: Repayment[] = []
+
+  let workingBalances = [...outstandingBalances.map(([a, b]) => [a, b])] as [
+    string,
+    number
+  ][]
+
+  let x = 0
+  while (workingBalances.length > 1 && x++ < 100) {
+    const [contributor1, balance1] = workingBalances[0]
+
+    const i = workingBalances.findIndex(([contributor, balance]) => {
+      return contributor1 !== contributor && !isSameSign(balance1, balance)
+    })
+
+    if (i === -1) {
+      break
+    }
+
+    const [contributor2, balance2] = workingBalances[i]
+
+    const paymentAmount = Math.min(Math.abs(balance1), Math.abs(balance2))
+
+    workingBalances[0][1] += paymentAmount * (balance1 > 0 ? -1 : 1)
+    workingBalances[i][1] += paymentAmount * (balance2 > 0 ? -1 : 1)
 
     // record transaction
-    results.push({
-      id: Math.random(),
-      creditor: currentBalance > 0 ? currentName : otherName,
-      debtor: currentBalance > 0 ? otherName : currentName,
-      value: paymentAmount,
+    repayments.push({
+      creditor: balance1 > 0 ? contributor1 : contributor2,
+      debtor: balance1 > 0 ? contributor2 : contributor1,
+      amount: paymentAmount,
     })
 
     // delete balances which have been resolved (i.e. ~0)
-    if (withinError(balances[i][1])) balances = deleteObjectInArray(balances, i)
-    if (withinError(balances[0][1])) balances = deleteObjectInArray(balances, 0)
-  }
-  return results
-}
-
-function getBalances(payers: Contributor[]) {
-  // pre-process state to get array of payment sums as well as sum of all payments.
-  const totals = []
-  let total = 0
-  for (const payer of payers) {
-    const payments = payer.contributions
-      .filter((payment) => payment.amount !== null && !isNaN(payment.amount))
-      .map((payment) => {
-        return payment.amount
-      }) as number[]
-    const paymentsSum = payments.reduce((a, b) => a + b, 0)
-
-    total += paymentsSum
-    totals.push({ name: payer.name, total: paymentsSum })
+    workingBalances = workingBalances.filter(
+      ([, balance]) => !isCloseToZero(balance)
+    )
   }
 
-  // once total sum of all payments is known we can calculate who owes money (-ve value) and who is owed (+ve).
-  const contribution = total / payers.length
-  const balances: [string, number][] = totals.map((person) => [
-    person.name,
-    person.total - contribution,
-  ])
-  return balances.filter(([, balance]) => !withinError(balance))
+  return {
+    outstandingBalances,
+    contributorTotals,
+    targetContribution,
+    total,
+    repayments,
+  }
 }
 
-const deleteObjectInArray = <T>(arr: T[], i: number) => {
-  return Array.prototype.concat(arr.slice(0, i), arr.slice(i + 1))
+function calculateContributorTotals(contributions: Contribution[]) {
+  const contributorTotals = new Map<string, number>()
+  for (const { contributor, ...contribution } of contributions) {
+    if (contribution.amount !== null) {
+      const total = contributorTotals.get(contributor) ?? 0
+      contributorTotals.set(contributor, total + contribution.amount)
+    }
+  }
+  return contributorTotals
 }
 
-const hasSamePolarity = (x: number, y: number) => XNOR(x > 0, y > 0)
+function calculateContributorBalances(
+  contributorTotals: Map<string, number>,
+  equalAmount: number
+) {
+  const contributorBalances: [string, number][] = []
+  for (const [contributor, total] of contributorTotals) {
+    contributorBalances.push([contributor, total - equalAmount])
+  }
+  return contributorBalances
+}
 
-const XNOR = (a: boolean, b: boolean) => (a && b) || (!a && !b)
-
-const withinError = (value: number) => Math.abs(value) < 0.01
+const isCloseToZero = (value: number) => Math.abs(value) < 0.01
+const isSameSign = (x: number, y: number) => exclusiveOr(x > 0, y > 0)
+const exclusiveOr = (a: boolean, b: boolean) => (a && b) || (!a && !b)
