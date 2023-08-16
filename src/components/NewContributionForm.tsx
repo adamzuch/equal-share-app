@@ -6,6 +6,7 @@ import { Contribution } from '@/lib/equalize'
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -65,15 +66,8 @@ export function NewContributionForm({
   }
 
   return (
-    <Card className="w-96">
-      <CardHeader>
-        <CardTitle>New contribution</CardTitle>
-        <CardDescription>
-          Add a contribution and assign it to someone. You can add a description
-          too.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
+    <Card>
+      <CardContent className="pt-6">
         <Form {...form}>
           <form
             className="flex flex-col gap-3"
@@ -94,8 +88,9 @@ export function NewContributionForm({
                         <Input
                           {...field}
                           id="amount"
+                          autoComplete="off"
                           className="w-24 pl-7"
-                          placeholder="Enter an amount"
+                          placeholder="0.00"
                         />
                       </div>
                     </FormControl>
@@ -116,6 +111,7 @@ export function NewContributionForm({
                         <Input
                           {...field}
                           id="description"
+                          autoComplete="off"
                           className="w-full"
                           placeholder="Enter a description"
                         />
@@ -159,6 +155,10 @@ export function NewContributionForm({
                         </>
                       </FormControl>
                       <FormMessage />
+                      <FormDescription>
+                        If the contributor doesn't exist yet, they will be
+                        added. Names are case-sensitive.
+                      </FormDescription>
                     </FormItem>
                   )}
                 />

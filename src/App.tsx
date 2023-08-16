@@ -76,19 +76,31 @@ function App() {
           </p>
         </div>
 
-        <NewContributionForm
-          contributions={contributions}
-          contributors={contributors}
-          onNewContribution={addContribution}
-        />
-        <div className="space-y-2">
-          <h3 className="text-xl font-bold">Contributions</h3>
+        <div className="flex flex-col sm:flex-row gap-6">
+          <div className="w-full sm:w-80">
+            <NewContributionForm
+              contributions={contributions}
+              contributors={contributors}
+              onNewContribution={addContribution}
+            />
+          </div>
+          <div className="space-y-1.5">
+            <h3 className="text-xl font-bold">Contributions</h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-1auto-rows-[1fr]  gap-3">
+              {contributions.map((contribution, i) => (
+                <ContributionCard contribution={contribution} key={i} />
+              ))}
+            </div>
+          </div>
+        </div>
+        {/* <div className="space-y-2">
           <div className="grid grid-cols-1 sm:grid-cols-2 auto-rows-[1fr]  gap-3">
             {contributions.map((contribution, i) => (
               <ContributionCard contribution={contribution} key={i} />
             ))}
           </div>
-        </div>
+        </div> */}
 
         {calculated !== null ? (
           <Summary contributors={contributors} {...calculated} />
