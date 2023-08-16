@@ -63,7 +63,7 @@ function App() {
   }
 
   const addContribution = (contribution: Contribution) => {
-    setContributions([...contributions, contribution])
+    setContributions([contribution, ...contributions])
   }
 
   return (
@@ -89,7 +89,7 @@ function App() {
 
             <div className="grid grid-cols-1 sm:grid-cols-1auto-rows-[1fr]  gap-3">
               {contributions.map((contribution, i) => (
-                <ContributionCard contribution={contribution} key={i} />
+                <ContributionCard key={i} contribution={contribution} />
               ))}
             </div>
           </div>

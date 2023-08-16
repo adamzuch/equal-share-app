@@ -15,14 +15,8 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from './ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Apple, Banana, Cat } from 'lucide-react'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from './ui/card'
+import { Cat } from 'lucide-react'
+import { Card, CardContent } from './ui/card'
 
 const formSchema = z.object({
   amount: z.coerce
@@ -164,10 +158,18 @@ export function NewContributionForm({
                 />
               </div>
             </div>
-
-            <Button className="mt-6" variant="default" type="submit">
-              Add contribution
-            </Button>
+            <div className="mt-6 flex gap-3 space-between">
+              <Button
+                onClick={() => form.reset()}
+                variant="secondary"
+                type="reset"
+              >
+                Reset
+              </Button>
+              <Button className="flex-1" variant="default" type="submit">
+                Add contribution
+              </Button>
+            </div>
           </form>
         </Form>
       </CardContent>
