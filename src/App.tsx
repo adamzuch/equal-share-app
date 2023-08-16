@@ -1,13 +1,23 @@
 import { useState } from 'react'
 
 import { Contribution, equalize } from './lib/equalize'
-import { Contributions } from './components/Contributions'
+// import { Contributions } from './components/Contributions'
+
 import { Summary } from './components/Summary'
+import ContributionCard from './components/Contribution'
+import { NewContributionForm } from './components/NewContributionForm'
 
 const INITIAL_CONTRIBUTIONS: Contribution[] = [
   { amount: 23, contributor: 'Adam', description: '' },
-  { amount: 7, contributor: 'Bill', description: '' },
-  { amount: 5, contributor: 'John', description: '' },
+  { amount: 7, contributor: 'Bill', description: 'Bus fare' },
+  { amount: 5, contributor: 'John', description: 'Shared lunch' },
+  {
+    amount: 520,
+    contributor: 'John',
+    description: 'Accomodation for London',
+  },
+
+  { amount: 15, contributor: 'Frank', description: '' },
 ]
 
 function App() {
@@ -57,24 +67,28 @@ function App() {
   }
 
   return (
-    <div className="h-screen w-scree flex flex-col items-center">
-      <div className="h-full max-w-3xl p-4 space-y-12">
+    <div className="h-screen w-screen flex flex-col items-center">
+      <div className="h-full max-w-[768px] p-4 space-y-12">
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold">equal share</h1>
+          <h1 className="text-3xl font-bold">equalshare</h1>
           <p className="text-base">
             Enter payments to split equally, see instant results.
           </p>
         </div>
 
-        <Contributions
+        <NewContributionForm
           contributions={contributions}
           contributors={contributors}
-          onAmountChange={updateAmount}
-          onContributorChange={updateContributor}
-          onDescriptionChange={updateDescription}
-          onDelete={deleteContribution}
           onNewContribution={addContribution}
         />
+        <div className="space-y-2">
+          <h3 className="text-xl font-bold">Contributions</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 auto-rows-[1fr]  gap-3">
+            {contributions.map((contribution, i) => (
+              <ContributionCard contribution={contribution} key={i} />
+            ))}
+          </div>
+        </div>
 
         {calculated !== null ? (
           <Summary contributors={contributors} {...calculated} />
