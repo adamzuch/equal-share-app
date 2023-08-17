@@ -1,5 +1,5 @@
 import * as z from 'zod'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Contribution } from '@/lib/equalize'
@@ -15,8 +15,9 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from './ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Cat } from 'lucide-react'
 import { Card, CardContent } from './ui/card'
+import { getAvatarColor, getAvatarIcon } from '@/lib/avatar'
+import { Cat } from 'lucide-react'
 
 const formSchema = z.object({
   amount: z.coerce
@@ -58,6 +59,18 @@ export function NewContributionForm({
     form.reset()
     document.getElementById('amount')?.focus()
   }
+
+  const contributor = useWatch({
+    control: form.control,
+    name: 'contributor',
+    defaultValue: '',
+  })
+
+  const AvatarIcon = contributor !== '' ? getAvatarIcon(contributor) : Cat
+  const avatarColor = contributor !== '' ? getAvatarColor(contributor) : ''
+
+  // const [AvatarIcon, setAvatarIcon] = useState<LucideIcon>(Cat)
+  // const [avatarColor, setAvatarColor] = useState('')
 
   return (
     <Card>
@@ -107,7 +120,7 @@ export function NewContributionForm({
                           id="description"
                           autoComplete="off"
                           className="w-full"
-                          placeholder="Enter a description"
+                          placeholder="Describe payment"
                         />
                       </FormControl>
                       <FormMessage />
@@ -119,8 +132,8 @@ export function NewContributionForm({
 
             <div className="flex items-start gap-3">
               <Avatar className="mt-8">
-                <AvatarFallback>
-                  <Cat />
+                <AvatarFallback style={{ backgroundColor: avatarColor }}>
+                  <AvatarIcon />
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1">
@@ -137,7 +150,19 @@ export function NewContributionForm({
                             id="contributor"
                             list="contributors"
                             autoComplete="off"
-                            placeholder="Enter a contributor"
+                            placeholder="Enter contributor's name"
+                            // onChange={(e) => {
+                            //   const value = e.target.value
+                            //   if (value === '') {
+                            //     setAvatarIcon(Cat)
+                            //     setAvatarColor('')
+                            //   } else {
+                            //     const Icon = getAvatarIcon(value)
+                            //     const color = getAvatarColor(value)
+                            //     setAvatarIcon(Icon)
+                            //     setAvatarColor(color)
+                            //   }
+                            // }}
                           />
                           <datalist id="contributors">
                             {Array.from(contributors.values()).map(
@@ -150,26 +175,18 @@ export function NewContributionForm({
                       </FormControl>
                       <FormMessage />
                       <FormDescription>
-                        If the contributor doesn't exist yet, they will be
-                        added. Names are case-sensitive.
+                        If the contributor doesn't exist, they will be added.
+                        Names are case-sensitive.
                       </FormDescription>
                     </FormItem>
                   )}
                 />
               </div>
             </div>
-            <div className="mt-6 flex gap-3 space-between">
-              <Button
-                onClick={() => form.reset()}
-                variant="secondary"
-                type="reset"
-              >
-                Reset
-              </Button>
-              <Button className="flex-1" variant="default" type="submit">
-                Add contribution
-              </Button>
-            </div>
+
+            <Button className="mt-6" variant="default" type="submit">
+              Add payment
+            </Button>
           </form>
         </Form>
       </CardContent>
