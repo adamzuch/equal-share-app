@@ -12,7 +12,7 @@ const INITIAL_CONTRIBUTIONS: Contribution[] = [
   { amount: 7, contributor: 'Bill', description: 'Bus fare' },
   { amount: 5, contributor: 'John', description: 'Shared lunch' },
   {
-    amount: 520,
+    amount: 52,
     contributor: 'John',
     description: 'Accomodation for London',
   },
@@ -67,8 +67,8 @@ function App() {
   }
 
   return (
-    <div className="h-screen w-screen flex flex-col items-center">
-      <div className="h-full max-w-[768px] p-4 space-y-12">
+    <div className="font-atkinson h-screen w-screen flex flex-col items-center">
+      <div className="h-full p-4 space-y-12">
         <div className="space-y-2">
           <h1 className="text-3xl font-bold">equalshare</h1>
           <p className="text-base">
@@ -77,30 +77,22 @@ function App() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-6">
-          <div className="w-full sm:w-80">
+          <div className="w-full min-w-[318px] sm:w-80">
             <NewContributionForm
               contributions={contributions}
               contributors={contributors}
               onNewContribution={addContribution}
             />
           </div>
-          <div className="space-y-1.5">
-            <h3 className="text-xl font-bold">Contributions</h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-1auto-rows-[1fr]  gap-3">
+          <div className="space-y-1.5 pr-1.5 max-h-[492px] overflow-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 auto-rows-[1fr]  gap-3">
               {contributions.map((contribution, i) => (
                 <ContributionCard key={i} contribution={contribution} />
               ))}
             </div>
           </div>
         </div>
-        {/* <div className="space-y-2">
-          <div className="grid grid-cols-1 sm:grid-cols-2 auto-rows-[1fr]  gap-3">
-            {contributions.map((contribution, i) => (
-              <ContributionCard contribution={contribution} key={i} />
-            ))}
-          </div>
-        </div> */}
 
         {calculated !== null ? (
           <Summary contributors={contributors} {...calculated} />

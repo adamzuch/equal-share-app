@@ -176,7 +176,6 @@ export function NewContributionForm({
                       <FormMessage />
                       <FormDescription>
                         If the contributor doesn't exist, they will be added.
-                        Names are case-sensitive.
                       </FormDescription>
                     </FormItem>
                   )}
