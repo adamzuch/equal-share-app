@@ -7,6 +7,8 @@ import { Summary } from './components/Summary'
 import ContributionCard from './components/Contribution'
 import { NewContributionForm } from './components/NewContributionForm'
 
+import { ScrollArea } from '@/components/ui/scroll-area'
+
 const INITIAL_CONTRIBUTIONS: Contribution[] = [
   { amount: 23, contributor: 'Adam', description: '' },
   { amount: 7, contributor: 'Bill', description: 'Bus fare' },
@@ -67,17 +69,17 @@ function App() {
   }
 
   return (
-    <div className="font-atkinson h-screen w-screen flex flex-col items-center">
-      <div className="h-full p-4 space-y-12">
-        <div className="space-y-2">
+    <div className="h-screen flex flex-col items-center">
+      <div className="h-full w-full md:w-[768px] lg:w-[1024px] p-6 space-y-6">
+        <div className="space-y-1.5">
           <h1 className="text-3xl font-bold">equalshare</h1>
           <p className="text-base">
             Enter payments to split equally, see instant results.
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-6">
-          <div className="w-full min-w-[318px] sm:w-80">
+        <div className="flex flex-col lg:flex-row gap-6">
+          <div className="w-full min-w-[318px] lg:w-80">
             <NewContributionForm
               contributions={contributions}
               contributors={contributors}
@@ -85,8 +87,8 @@ function App() {
             />
           </div>
 
-          <div className="space-y-1.5 pr-1.5 max-h-[492px] overflow-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 auto-rows-[1fr]  gap-3">
+          <div className="flex-1 space-y-1.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 auto-rows-[1fr] gap-3">
               {contributions.map((contribution, i) => (
                 <ContributionCard key={i} contribution={contribution} />
               ))}

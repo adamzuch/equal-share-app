@@ -151,18 +151,6 @@ export function NewContributionForm({
                             list="contributors"
                             autoComplete="off"
                             placeholder="Enter contributor's name"
-                            // onChange={(e) => {
-                            //   const value = e.target.value
-                            //   if (value === '') {
-                            //     setAvatarIcon(Cat)
-                            //     setAvatarColor('')
-                            //   } else {
-                            //     const Icon = getAvatarIcon(value)
-                            //     const color = getAvatarColor(value)
-                            //     setAvatarIcon(Icon)
-                            //     setAvatarColor(color)
-                            //   }
-                            // }}
                           />
                           <datalist id="contributors">
                             {Array.from(contributors.values()).map(
