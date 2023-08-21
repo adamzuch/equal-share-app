@@ -70,7 +70,7 @@ function App() {
 
   return (
     <div className="h-screen flex flex-col items-center">
-      <div className="h-full w-full md:w-[768px] lg:w-[1024px] p-6 space-y-6">
+      <div className="h-full w-full md:w-[768px] lg:w-[1024px] p-6 space-y-12">
         <div className="space-y-1.5">
           <h1 className="text-3xl font-bold">equalshare</h1>
           <p className="text-base">
@@ -78,27 +78,30 @@ function App() {
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-6">
-          <div className="w-full min-w-[318px] lg:w-80">
-            <NewContributionForm
-              contributions={contributions}
-              contributors={contributors}
-              onNewContribution={addContribution}
-            />
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
+          <div className="flex flex-col gap-12">
+            <div className="min-w-[318px] w-full">
+              <NewContributionForm
+                contributions={contributions}
+                contributors={contributors}
+                onNewContribution={addContribution}
+              />
+            </div>
 
-          <div className="flex-1 space-y-1.5">
-            <div className="grid grid-cols-1 sm:grid-cols-2 auto-rows-[1fr] gap-3">
-              {contributions.map((contribution, i) => (
-                <ContributionCard key={i} contribution={contribution} />
-              ))}
+            <div className="space-y-3">
+              <h2 className="text-xl font-bold">Contributions</h2>
+              <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
+                {contributions.map((contribution, i) => (
+                  <ContributionCard key={i} contribution={contribution} />
+                ))}
+              </div>
             </div>
           </div>
-        </div>
 
-        {calculated !== null ? (
-          <Summary contributors={contributors} {...calculated} />
-        ) : null}
+          {calculated !== null ? (
+            <Summary contributors={contributors} {...calculated} />
+          ) : null}
+        </div>
       </div>
     </div>
   )
