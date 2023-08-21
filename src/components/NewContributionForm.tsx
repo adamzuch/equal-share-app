@@ -66,11 +66,22 @@ export function NewContributionForm({
     defaultValue: '',
   })
 
+  const amount = useWatch({
+    control: form.control,
+    name: 'amount',
+    defaultValue: 0,
+  })
+
+  const description = useWatch({
+    control: form.control,
+    name: 'description',
+    defaultValue: '',
+  })
+
   const AvatarIcon = contributor !== '' ? getAvatarIcon(contributor) : Cat
   const avatarColor = contributor !== '' ? getAvatarColor(contributor) : ''
 
-  // const [AvatarIcon, setAvatarIcon] = useState<LucideIcon>(Cat)
-  // const [avatarColor, setAvatarColor] = useState('')
+  const showPreview = amount >= 0 && contributor !== ''
 
   return (
     <Card>
@@ -130,46 +141,59 @@ export function NewContributionForm({
               </div>
             </div>
 
-            <div className="flex items-start gap-3">
-              <Avatar className="mt-8">
-                <AvatarFallback style={{ backgroundColor: avatarColor }}>
-                  <AvatarIcon />
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1">
-                <FormField
-                  control={form.control}
-                  name="contributor"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor="contributor">Contributor</FormLabel>
-                      <FormControl>
-                        <>
-                          <Input
-                            {...field}
-                            id="contributor"
-                            list="contributors"
-                            autoComplete="off"
-                            placeholder="Enter contributor's name"
-                          />
-                          <datalist id="contributors">
-                            {Array.from(contributors.values()).map(
-                              (contributor) => (
-                                <option key={contributor}>{contributor}</option>
-                              )
-                            )}
-                          </datalist>
-                        </>
-                      </FormControl>
-                      <FormMessage />
-                      <FormDescription>
-                        If the contributor doesn't exist, they will be added.
-                      </FormDescription>
-                    </FormItem>
-                  )}
-                />
+            <FormField
+              control={form.control}
+              name="contributor"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="contributor">Contributor</FormLabel>
+                  <FormControl>
+                    <>
+                      <Input
+                        {...field}
+                        id="contributor"
+                        list="contributors"
+                        autoComplete="off"
+                        placeholder="Enter contributor's name"
+                      />
+                      <datalist id="contributors">
+                        {Array.from(contributors.values()).map(
+                          (contributor) => (
+                            <option key={contributor}>{contributor}</option>
+                          )
+                        )}
+                      </datalist>
+                    </>
+                  </FormControl>
+                  <FormMessage />
+                  <FormDescription>
+                    If the contributor doesn't exist, they will be added.
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
+
+            {showPreview ? (
+              <div className="mt-6">
+                <div className="flex-1 min-w-0 flex items-center gap-3">
+                  <Avatar>
+                    <AvatarFallback style={{ backgroundColor: avatarColor }}>
+                      <AvatarIcon />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0 truncate">
+                    <span className="font-medium">{contributor}</span> paid{' '}
+                    <span className="font-bold">${amount}</span>
+                    {description ? (
+                      <span>
+                        {' '}
+                        for <span className="italic">{description}</span>
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
               </div>
-            </div>
+            ) : null}
 
             <Button className="mt-6" variant="default" type="submit">
               Add payment

@@ -4,10 +4,8 @@ import { Contribution, equalize } from './lib/equalize'
 // import { Contributions } from './components/Contributions'
 
 import { Summary } from './components/Summary'
-import ContributionCard from './components/Contribution'
+import ContributionCard from './components/ContributionCard'
 import { NewContributionForm } from './components/NewContributionForm'
-
-import { ScrollArea } from '@/components/ui/scroll-area'
 
 const INITIAL_CONTRIBUTIONS: Contribution[] = [
   { amount: 23, contributor: 'Adam', description: '' },
@@ -32,37 +30,37 @@ function App() {
   console.log(contributions)
   console.log(calculated)
 
-  const updateAmount = (i: number, value: string) => {
-    const amount = isNaN(Number(value)) ? null : Number(value)
-    const updatedContribution = { ...contributions[i], amount }
-    setContributions([
-      ...contributions.slice(0, i),
-      updatedContribution,
-      ...contributions.slice(i + 1),
-    ])
-  }
+  // const updateAmount = (i: number, value: string) => {
+  //   const amount = isNaN(Number(value)) ? null : Number(value)
+  //   const updatedContribution = { ...contributions[i], amount }
+  //   setContributions([
+  //     ...contributions.slice(0, i),
+  //     updatedContribution,
+  //     ...contributions.slice(i + 1),
+  //   ])
+  // }
 
-  const updateContributor = (i: number, value: string) => {
-    const updatedContribution = { ...contributions[i], contributor: value }
-    setContributions([
-      ...contributions.slice(0, i),
-      updatedContribution,
-      ...contributions.slice(i + 1),
-    ])
-  }
+  // const updateContributor = (i: number, value: string) => {
+  //   const updatedContribution = { ...contributions[i], contributor: value }
+  //   setContributions([
+  //     ...contributions.slice(0, i),
+  //     updatedContribution,
+  //     ...contributions.slice(i + 1),
+  //   ])
+  // }
 
-  const updateDescription = (i: number, value: string) => {
-    const updatedContribution = { ...contributions[i], description: value }
-    setContributions([
-      ...contributions.slice(0, i),
-      updatedContribution,
-      ...contributions.slice(i + 1),
-    ])
-  }
+  // const updateDescription = (i: number, value: string) => {
+  //   const updatedContribution = { ...contributions[i], description: value }
+  //   setContributions([
+  //     ...contributions.slice(0, i),
+  //     updatedContribution,
+  //     ...contributions.slice(i + 1),
+  //   ])
+  // }
 
-  const deleteContribution = (i: number) => {
-    setContributions(contributions.filter((_, j) => i !== j))
-  }
+  // const deleteContribution = (i: number) => {
+  //   setContributions(contributions.filter((_, j) => i !== j))
+  // }
 
   const addContribution = (contribution: Contribution) => {
     setContributions([contribution, ...contributions])
@@ -78,9 +76,9 @@ function App() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
-          <div className="flex flex-col gap-12">
-            <div className="min-w-[318px] w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-9">
+          <div className="flex flex-col gap-6">
+            <div className="min-w-[305px] w-full">
               <NewContributionForm
                 contributions={contributions}
                 contributors={contributors}
