@@ -8,8 +8,10 @@ import { Button } from './ui/button'
 
 export default function ContributionCard({
   contribution,
+  isEditable = true,
 }: {
   contribution: Contribution
+  isEditable?: boolean
 }) {
   const { amount, contributor, description } = contribution
 
@@ -26,18 +28,20 @@ export default function ContributionCard({
         </Avatar>
         <div className="flex-1 min-w-0 truncate">
           <span className="font-medium">{contributor}</span> paid{' '}
-          <span className="font-bold">${amount}</span>
+          <span className="font-semibold">${amount}</span>
           {description ? (
             <span>
               {' '}
-              for <span className="italic">{description}</span>
+              for <span>{description}</span>
             </span>
           ) : null}
         </div>
       </div>
-      <Button size="icon" variant="ghost">
-        <MoreVertical />
-      </Button>
+      {isEditable ? (
+        <Button type="button" size="icon" variant="ghost">
+          <MoreVertical />
+        </Button>
+      ) : null}
     </Card>
   )
 }

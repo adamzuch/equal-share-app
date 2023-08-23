@@ -2,22 +2,24 @@ import * as z from 'zod'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { Cat } from 'lucide-react'
+
 import { Contribution } from '@/lib/equalize'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+} from './ui/form'
+import { Input } from './ui/input'
 import { Button } from './ui/button'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Card, CardContent } from './ui/card'
-import { getAvatarColor, getAvatarIcon } from '@/lib/avatar'
-import { Cat } from 'lucide-react'
+import { Avatar, AvatarFallback } from './ui/avatar'
+
+import { getAvatarColor, getAvatarIcon } from '../lib/avatar'
+import ContributionCard from './ContributionCard'
 
 const formSchema = z.object({
   amount: z.coerce
@@ -84,123 +86,112 @@ export function NewContributionForm({
   const showPreview = amount >= 0 && contributor !== ''
 
   return (
-    <Card>
-      <CardContent className="pt-6">
-        <Form {...form}>
-          <form
-            className="flex flex-col gap-3"
-            onSubmit={form.handleSubmit(handleSubmit)}
-          >
-            <div className="flex items-start gap-3">
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)}>
+        <div className="flex flex-col sm:flex-row gap-3 w-full">
+          <div className="flex gap-3">
+            <FormField
+              control={form.control}
+              name="amount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="amount">Amount</FormLabel>
+                  <FormControl>
+                    <div className="relative flex">
+                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 z-20">
+                        <span className="text-gray-500 sm:text-sm">$</span>
+                      </div>
+                      <Input
+                        {...field}
+                        id="amount"
+                        autoComplete="off"
+                        className="w-24 pl-7"
+                        placeholder="0.00"
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex-1">
               <FormField
                 control={form.control}
-                name="amount"
+                name="contributor"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel htmlFor="amount">Amount</FormLabel>
+                    <FormLabel htmlFor="contributor">Contributor</FormLabel>
                     <FormControl>
-                      <div className="relative flex">
-                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 z-20">
-                          <span className="text-gray-500 sm:text-sm">$</span>
-                        </div>
+                      <>
                         <Input
                           {...field}
-                          id="amount"
+                          id="contributor"
+                          list="contributors"
                           autoComplete="off"
-                          className="w-24 pl-7"
-                          placeholder="0.00"
+                          placeholder="Enter name"
                         />
-                      </div>
+                        <datalist id="contributors">
+                          {Array.from(contributors.values()).map(
+                            (contributor) => (
+                              <option key={contributor}>{contributor}</option>
+                            )
+                          )}
+                        </datalist>
+                      </>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <div className="flex-1">
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor="description">
-                        Description (optional)
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          id="description"
-                          autoComplete="off"
-                          className="w-full"
-                          placeholder="Describe payment"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
             </div>
-
+          </div>
+          <div className="flex-1">
             <FormField
               control={form.control}
-              name="contributor"
+              name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="contributor">Contributor</FormLabel>
+                  <FormLabel htmlFor="description">
+                    Description (optional)
+                  </FormLabel>
                   <FormControl>
-                    <>
-                      <Input
-                        {...field}
-                        id="contributor"
-                        list="contributors"
-                        autoComplete="off"
-                        placeholder="Enter contributor's name"
-                      />
-                      <datalist id="contributors">
-                        {Array.from(contributors.values()).map(
-                          (contributor) => (
-                            <option key={contributor}>{contributor}</option>
-                          )
-                        )}
-                      </datalist>
-                    </>
+                    <Input
+                      {...field}
+                      id="description"
+                      autoComplete="off"
+                      className="w-full"
+                      placeholder="Describe payment"
+                    />
                   </FormControl>
                   <FormMessage />
-                  <FormDescription>
-                    If the contributor doesn't exist, they will be added.
-                  </FormDescription>
                 </FormItem>
               )}
             />
+          </div>
+        </div>
 
-            {showPreview ? (
-              <div className="mt-6">
-                <div className="flex-1 min-w-0 flex items-center gap-3">
-                  <Avatar>
-                    <AvatarFallback style={{ backgroundColor: avatarColor }}>
-                      <AvatarIcon />
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 min-w-0 truncate">
-                    <span className="font-medium">{contributor}</span> paid{' '}
-                    <span className="font-bold">${amount}</span>
-                    {description ? (
-                      <span>
-                        {' '}
-                        for <span className="italic">{description}</span>
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-            ) : null}
+        {showPreview ? (
+          <div className="mt-6">
+            <ContributionCard
+              contribution={{
+                amount,
+                contributor,
+                description: description ?? '',
+              }}
+              isEditable={false}
+            />
+          </div>
+        ) : null}
 
-            <Button className="mt-6" variant="default" type="submit">
-              Add payment
-            </Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+        <div className="mt-6 flex flex-row-reverse items-center justify-start gap-3">
+          <Button type="submit" variant="default">
+            Add contribution
+          </Button>
+          <Button type="reset" variant="secondary" onClick={() => form.reset()}>
+            Cancel
+          </Button>
+        </div>
+      </form>
+    </Form>
   )
 }
