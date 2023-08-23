@@ -1,11 +1,10 @@
 import { useState } from 'react'
 
-import { Contribution, equalize } from './lib/equalize'
-// import { Contributions } from './components/Contributions'
-
 import { Summary } from './components/Summary'
-import ContributionCard from './components/ContributionCard'
+import { ContributionCard } from './components/ContributionCard'
 import { NewContributionForm } from './components/NewContributionForm'
+
+import { Contribution, equalize } from './lib/equalize'
 
 const INITIAL_CONTRIBUTIONS: Contribution[] = [
   { amount: 23, contributor: 'Adam', description: '' },

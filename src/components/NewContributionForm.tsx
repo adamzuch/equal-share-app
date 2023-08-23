@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Cat } from 'lucide-react'
 
-import { Contribution } from '@/lib/equalize'
 import {
   Form,
   FormControl,
@@ -15,11 +14,10 @@ import {
 } from './ui/form'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
-import { Card, CardContent } from './ui/card'
-import { Avatar, AvatarFallback } from './ui/avatar'
 
+import { Contribution } from '../lib/equalize'
 import { getAvatarColor, getAvatarIcon } from '../lib/avatar'
-import ContributionCard from './ContributionCard'
+import { ContributionCard } from './ContributionCard'
 
 const formSchema = z.object({
   amount: z.coerce

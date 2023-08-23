@@ -6,7 +6,7 @@ import { getAvatarColor, getAvatarIcon } from '@/lib/avatar'
 import { MoreVertical } from 'lucide-react'
 import { Button } from './ui/button'
 
-export default function ContributionCard({
+export function ContributionCard({
   contribution,
   isEditable = true,
 }: {
