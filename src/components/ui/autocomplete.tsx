@@ -21,6 +21,7 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>(
       onChange,
       onBlur,
       onFocus,
+      onKeyDown,
       ...props
     }: AutocompleteProps,
     ref
@@ -30,20 +31,16 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>(
 
     const [activeIndex, setActiveIndex] = React.useState(-1)
 
-    const options = allOptions.filter((option) =>
-      option.toLowerCase().includes(query.toLowerCase())
-    )
-    // const filteredOptions = options
-
-    console.log('open', open)
-    console.log('query', query)
-    console.log('options', options)
-    // console.log('activeIndex', activeIndex)
+    const options =
+      query !== ''
+        ? allOptions.filter((option) =>
+            option.toLowerCase().includes(query.toLowerCase())
+          )
+        : []
 
     const handleAutocompleteChange = (
       e: React.ChangeEvent<HTMLInputElement>
     ) => {
-      console.log('change', e.target.value)
       setQuery(e.target.value)
       setOpen(e.target.value.length > 0)
       setActiveIndex(-1)
@@ -64,10 +61,29 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>(
       }
     }
 
-    const handleOptionSelect = () => {
-      onOptionSelect?.(options[activeIndex])
+    const selectOption = (selectedIndex: number) => {
+      onOptionSelect?.(options[selectedIndex])
       setQuery('')
       setOpen(false)
+    }
+
+    const handleAutocompleteKeyDown = (
+      e: React.KeyboardEvent<HTMLInputElement>
+    ) => {
+      if (
+        activeIndex > -1 &&
+        activeIndex < options.length &&
+        e.key === 'Enter'
+      ) {
+        e.preventDefault()
+        selectOption(activeIndex)
+      }
+      if (activeIndex > -1 && e.key === 'ArrowUp') {
+        setActiveIndex(activeIndex - 1)
+      }
+      if (activeIndex < options.length - 1 && e.key === 'ArrowDown') {
+        setActiveIndex(activeIndex + 1)
+      }
     }
 
     return (
@@ -89,38 +105,32 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>(
             onBlur?.(e)
           }}
           onKeyDown={(e) => {
-            if (
-              activeIndex > -1 &&
-              activeIndex < options.length &&
-              e.key === 'Enter'
-            ) {
-              e.preventDefault()
-              console.log('enter')
-              handleOptionSelect()
-            }
-
-            if (activeIndex > -1 && e.key === 'ArrowUp') {
-              console.log('arrow up')
-              setActiveIndex(activeIndex - 1)
-            }
-            if (activeIndex < options.length - 1 && e.key === 'ArrowDown') {
-              console.log('arrow down')
-              setActiveIndex(activeIndex + 1)
-            }
+            handleAutocompleteKeyDown(e)
+            onKeyDown?.(e)
           }}
         />
         {open && options.length > 0 ? (
           <Card className="p-3 flex flex-col gap-3">
             {options.map((option, i) => (
-              <option
-                className={cn(activeIndex === i ? 'bg-slate-400' : '')}
+              <button
+                className={cn(
+                  'text-left',
+                  activeIndex === i ? 'bg-slate-100' : ''
+                )}
+                type="button"
                 key={option}
+                onMouseOver={() => {
+                  setActiveIndex(i)
+                }}
+                onMouseLeave={() => {
+                  setActiveIndex(-1)
+                }}
                 onClick={() => {
-                  handleOptionSelect()
+                  selectOption(i)
                 }}
               >
                 {option}
-              </option>
+              </button>
             ))}
           </Card>
         ) : null}
