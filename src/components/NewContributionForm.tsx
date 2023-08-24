@@ -2,8 +2,6 @@ import * as z from 'zod'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Cat } from 'lucide-react'
-
 import {
   Form,
   FormControl,
@@ -15,9 +13,9 @@ import {
 import { Input } from './ui/input'
 import { Button } from './ui/button'
 
-import { Contribution } from '../lib/equalize'
-import { getAvatarColor, getAvatarIcon } from '../lib/avatar'
+import { type Contribution } from '../lib/equalize'
 import { ContributionCard } from './ContributionCard'
+import { Autocomplete } from './ui/autocomplete'
 
 const formSchema = z.object({
   amount: z.coerce
@@ -78,9 +76,6 @@ export function NewContributionForm({
     defaultValue: '',
   })
 
-  const AvatarIcon = contributor !== '' ? getAvatarIcon(contributor) : Cat
-  const avatarColor = contributor !== '' ? getAvatarColor(contributor) : ''
-
   const showPreview = amount >= 0 && contributor !== ''
 
   return (
@@ -121,7 +116,7 @@ export function NewContributionForm({
                     <FormLabel htmlFor="contributor">Contributor</FormLabel>
                     <FormControl>
                       <>
-                        <Input
+                        {/* <Input
                           {...field}
                           id="contributor"
                           list="contributors"
@@ -134,7 +129,18 @@ export function NewContributionForm({
                               <option key={contributor}>{contributor}</option>
                             )
                           )}
-                        </datalist>
+                        </datalist> */}
+                        <Autocomplete
+                          {...field}
+                          // id="contributor"
+                          // list="contributors"
+                          // autoComplete="off")
+                          placeholder="Enter name"
+                          options={contributors}
+                          onOptionSelect={(option) => {
+                            form.setValue('contributor', option)
+                          }}
+                        />
                       </>
                     </FormControl>
                     <FormMessage />
