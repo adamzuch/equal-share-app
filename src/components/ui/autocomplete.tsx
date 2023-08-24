@@ -4,7 +4,6 @@ import { cn } from '@/lib/utils'
 
 import { Input } from './input'
 import { Card } from './card'
-import { on } from 'events'
 
 export interface AutocompleteProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
