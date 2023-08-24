@@ -45,14 +45,14 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>(
     ) => {
       console.log('change', e.target.value)
       setQuery(e.target.value)
-      setOpen(e.target.value.length > 0 && options.length > 0)
+      setOpen(e.target.value.length > 0)
       setActiveIndex(-1)
     }
 
     const handleAutocompleteFocus = (
       e: React.FocusEvent<HTMLInputElement, Element>
     ) => {
-      setOpen(e.target.value.length > 0 && options.length > 0)
+      setOpen(e.target.value.length > 0)
     }
 
     const handleAutocompleteBlur = () => {
