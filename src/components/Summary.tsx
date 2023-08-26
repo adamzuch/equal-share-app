@@ -7,6 +7,9 @@ import { ArrowRight } from 'lucide-react'
 
 export function Summary({
   repayments,
+  total,
+  targetContribution,
+  contributors,
 }: {
   contributors: string[]
   outstandingBalances: [string, number][]
@@ -15,12 +18,20 @@ export function Summary({
   total: number
 }) {
   return (
-    <div className="space-y-3">
-      <h2 className="text-xl font-bold tracking-wide">Settle debts</h2>
-      <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
-        {repayments.map((repayment, i) => (
-          <RepaymentCard key={i} repayment={repayment} />
-        ))}
+    <div className="space-y-12">
+      <h2 className="text-2xl text-center">
+        <span className="font-bold">${total}</span> contributed by{' '}
+        <span className="font-bold">{contributors.length} people</span> equals{' '}
+        <span className="font-bold">${targetContribution}</span> per person
+      </h2>
+
+      <div className="space-y-1.5">
+        <h2 className="text-xl font-bold tracking-wide">Settle debts</h2>
+        <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
+          {repayments.map((repayment, i) => (
+            <RepaymentCard key={i} repayment={repayment} />
+          ))}
+        </div>
       </div>
     </div>
   )
