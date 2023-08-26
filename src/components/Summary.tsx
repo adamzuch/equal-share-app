@@ -16,7 +16,7 @@ export function Summary({
 }) {
   return (
     <div className="space-y-3">
-      <h2 className="text-xl font-bold">Settle debts</h2>
+      <h2 className="text-xl font-bold tracking-wide">Settle debts</h2>
       <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
         {repayments.map((repayment, i) => (
           <RepaymentCard key={i} repayment={repayment} />

@@ -1,5 +1,6 @@
 import React, { forwardRef, useState } from 'react'
 import { Combobox } from '@headlessui/react'
+import { cn } from '@/lib/utils'
 
 type AutocompleteInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   options: string[]
@@ -9,7 +10,7 @@ type AutocompleteInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 export const AutocompleteInput = forwardRef<
   HTMLInputElement,
   AutocompleteInputProps
->(({ options: options, value, onChange, ...props }, ref) => {
+>(({ options, value, onChange, ...props }, ref) => {
   const [query, setQuery] = useState('')
 
   const filteredOptions =
@@ -20,7 +21,7 @@ export const AutocompleteInput = forwardRef<
         })
 
   return (
-    <Combobox value={value} onChange={onChange}>
+    <Combobox as="div" className="relative" value={value} onChange={onChange}>
       <Combobox.Input
         {...props}
         ref={ref}
@@ -32,9 +33,24 @@ export const AutocompleteInput = forwardRef<
           onChange?.(value)
         }}
       />
-      <Combobox.Options className="absolute mt-1 max-h-60 w-60 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+      <Combobox.Options
+        className={cn(
+          'absolute mt-1.5 shadow max-h-60 w-full overflow-y-auto overflow-x-hidden rounded-md border-border border bg-background focus:outline-none',
+          filteredOptions.length === 0 || query === '' ? 'hidden' : ''
+        )}
+      >
+        <Combobox.Option value={value} className="hidden" />
         {filteredOptions.map((option) => (
-          <Combobox.Option key={option} value={option}>
+          <Combobox.Option
+            key={option}
+            value={option}
+            className={({ active }) =>
+              cn(
+                'py-1.5 px-3 relative cursor-default select-none truncate',
+                active ? 'bg-accent text-accent-foreground' : ''
+              )
+            }
+          >
             {option}
           </Combobox.Option>
         ))}

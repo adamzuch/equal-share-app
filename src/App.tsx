@@ -85,7 +85,7 @@ function App() {
           </div>
 
           <div className="space-y-3">
-            <h2 className="text-xl font-bold">Contributions</h2>
+            <h2 className="text-xl font-bold tracking-wide">Contributions</h2>
             <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
               {contributions.map((contribution, i) => (
                 <ContributionCard key={i} contribution={contribution} />
