@@ -16,7 +16,7 @@ import { Button } from './ui/button'
 import { type Contribution } from '../lib/equalize'
 import { ContributionCard } from './ContributionCard'
 
-import { ContributorInput } from './ui/autocomplete2'
+import { AutocompleteInput } from './ui/autocomplete'
 
 const formSchema = z.object({
   amount: z.coerce
@@ -116,9 +116,11 @@ export function NewContributionForm({
                   <FormItem>
                     <FormLabel htmlFor="contributor">Contributor</FormLabel>
                     <FormControl>
-                      <ContributorInput
+                      <AutocompleteInput
                         {...field}
-                        contributors={contributors}
+                        id="contributor"
+                        options={contributors}
+                        placeholder="Enter name"
                       />
                     </FormControl>
                     <FormMessage />
