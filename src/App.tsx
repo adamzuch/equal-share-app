@@ -66,8 +66,8 @@ function App() {
   }
 
   return (
-    <div className="h-screen flex flex-col items-center font-work-sans">
-      <div className="h-full w-full md:w-[768px] p-6 space-y-12">
+    <div className="flex flex-col items-center font-work-sans">
+      <div className="w-full md:w-[768px] p-6 space-y-12">
         <div className="space-y-1.5">
           <h1 className="text-3xl font-bold">equalshare</h1>
           <p className="text-base">

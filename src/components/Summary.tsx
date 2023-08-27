@@ -10,6 +10,7 @@ export function Summary({
   total,
   targetContribution,
   contributors,
+  outstandingBalances,
 }: {
   contributors: string[]
   outstandingBalances: [string, number][]
@@ -26,6 +27,32 @@ export function Summary({
       </h2>
 
       <div className="space-y-1.5">
+        <h2 className="text-xl font-bold tracking-wide">Creditors</h2>
+        <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
+          {outstandingBalances
+            .filter(([, balance]) => balance > 0)
+            .map(([creditor, balance]) => (
+              <CreditorCard
+                key={creditor}
+                creditor={creditor}
+                balance={balance}
+              />
+            ))}
+        </div>
+      </div>
+
+      <div className="space-y-1.5">
+        <h2 className="text-xl font-bold tracking-wide">Debtors</h2>
+        <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
+          {outstandingBalances
+            .filter(([, balance]) => balance < 0)
+            .map(([debtor, balance]) => (
+              <DebtorCard key={debtor} debtor={debtor} balance={balance} />
+            ))}
+        </div>
+      </div>
+
+      <div className="space-y-1.5">
         <h2 className="text-xl font-bold tracking-wide">Settle debts</h2>
         <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
           {repayments.map((repayment, i) => (
@@ -34,6 +61,54 @@ export function Summary({
         </div>
       </div>
     </div>
+  )
+}
+
+function CreditorCard({
+  creditor,
+  balance,
+}: {
+  creditor: string
+  balance: number
+}) {
+  const CreditorIcon = getAvatarIcon(creditor)
+  const creditorColor = getAvatarColor(creditor)
+
+  return (
+    <Card className="p-3">
+      <div className="flex flex-row justify-between items-center gap-3">
+        <Avatar>
+          <AvatarFallback style={{ backgroundColor: creditorColor }}>
+            <CreditorIcon />
+          </AvatarFallback>
+        </Avatar>
+        <div className="flex-1 min-w-16 truncate">
+          <span className="font-medium">{creditor}</span> is owed{' '}
+          <span className="font-bold">${balance}</span>
+        </div>
+      </div>
+    </Card>
+  )
+}
+
+function DebtorCard({ debtor, balance }: { debtor: string; balance: number }) {
+  const DebtorIcon = getAvatarIcon(debtor)
+  const debtorColor = getAvatarColor(debtor)
+
+  return (
+    <Card className="p-3">
+      <div className="flex flex-row justify-between items-center gap-3">
+        <Avatar>
+          <AvatarFallback style={{ backgroundColor: debtorColor }}>
+            <DebtorIcon />
+          </AvatarFallback>
+        </Avatar>
+        <div className="flex-1 min-w-16 truncate">
+          <span className="font-medium">{debtor}</span> owes{' '}
+          <span className="font-bold">${balance}</span>
+        </div>
+      </div>
+    </Card>
   )
 }
 
