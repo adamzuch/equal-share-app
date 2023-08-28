@@ -2,8 +2,6 @@ import * as z from 'zod'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Cat } from 'lucide-react'
-
 import {
   Form,
   FormControl,
@@ -15,9 +13,10 @@ import {
 import { Input } from './ui/input'
 import { Button } from './ui/button'
 
-import { Contribution } from '../lib/equalize'
-import { getAvatarColor, getAvatarIcon } from '../lib/avatar'
+import { type Contribution } from '../lib/equalize'
 import { ContributionCard } from './ContributionCard'
+
+import { AutocompleteInput } from './ui/autocomplete'
 
 const formSchema = z.object({
   amount: z.coerce
@@ -78,9 +77,6 @@ export function NewContributionForm({
     defaultValue: '',
   })
 
-  const AvatarIcon = contributor !== '' ? getAvatarIcon(contributor) : Cat
-  const avatarColor = contributor !== '' ? getAvatarColor(contributor) : ''
-
   const showPreview = amount >= 0 && contributor !== ''
 
   return (
@@ -120,22 +116,12 @@ export function NewContributionForm({
                   <FormItem>
                     <FormLabel htmlFor="contributor">Contributor</FormLabel>
                     <FormControl>
-                      <>
-                        <Input
-                          {...field}
-                          id="contributor"
-                          list="contributors"
-                          autoComplete="off"
-                          placeholder="Enter name"
-                        />
-                        <datalist id="contributors">
-                          {Array.from(contributors.values()).map(
-                            (contributor) => (
-                              <option key={contributor}>{contributor}</option>
-                            )
-                          )}
-                        </datalist>
-                      </>
+                      <AutocompleteInput
+                        {...field}
+                        id="contributor"
+                        options={contributors}
+                        placeholder="Enter name"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

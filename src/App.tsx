@@ -66,8 +66,8 @@ function App() {
   }
 
   return (
-    <div className="h-screen flex flex-col items-center font-work-sans">
-      <div className="h-full w-full md:w-[768px] p-6 space-y-12">
+    <div className="flex flex-col items-center font-work-sans">
+      <div className="w-full md:w-[768px] p-6 space-y-12">
         <div className="space-y-1.5">
           <h1 className="text-3xl font-bold">equalshare</h1>
           <p className="text-base">
@@ -85,7 +85,7 @@ function App() {
           </div>
 
           <div className="space-y-3">
-            <h2 className="text-xl font-bold">Contributions</h2>
+            <h2 className="text-xl font-bold tracking-wide">Contributions</h2>
             <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
               {contributions.map((contribution, i) => (
                 <ContributionCard key={i} contribution={contribution} />
