@@ -27,8 +27,7 @@ export function ContributionCard({
           </AvatarFallback>
         </Avatar>
         <div className="flex-1 min-w-0 truncate">
-          <span className="font-medium">{contributor}</span> paid{' '}
-          <span className="font-semibold">${amount}</span>
+          {contributor} paid <span className="font-semibold">${amount}</span>
           {description ? (
             <span>
               {' '}

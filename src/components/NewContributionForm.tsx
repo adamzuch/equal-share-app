@@ -144,7 +144,7 @@ export function NewContributionForm({
                       id="description"
                       autoComplete="off"
                       className="w-full"
-                      placeholder="Describe payment"
+                      placeholder="Describe contribution"
                     />
                   </FormControl>
                   <FormMessage />
