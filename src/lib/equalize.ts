@@ -57,7 +57,7 @@ function calculateRepayments(accounts: Account[]): Repayment[] {
 
   let balances = [
     ...accounts.map(({ contributor, balance }) => [contributor, balance]),
-  ] as [string, number][]
+  ].filter(([, balance]) => balance !== 0) as [string, number][]
 
   while (balances.length > 1) {
     const [contributor1, balance1] = balances[0]

@@ -5,6 +5,7 @@ import { ContributionCard } from './components/ContributionCard'
 import { NewContributionForm } from './components/NewContributionForm'
 
 import { Contribution, equalize } from './lib/equalize'
+import { cn } from './lib/utils'
 
 const INITIAL_CONTRIBUTIONS: Contribution[] = [
   { amount: 23, contributor: 'Adam', description: '' },
@@ -15,7 +16,6 @@ const INITIAL_CONTRIBUTIONS: Contribution[] = [
     contributor: 'John',
     description: 'Accomodation for London',
   },
-
   { amount: 15, contributor: 'Frank', description: '' },
 ]
 
@@ -26,8 +26,8 @@ function App() {
   ]
   const calculated = equalize(contributions, contributors)
 
-  // console.log(contributions)
-  // console.log(calculated)
+  console.log(contributions)
+  console.log(calculated)
 
   // const updateAmount = (i: number, value: string) => {
   //   const amount = isNaN(Number(value)) ? null : Number(value)
@@ -67,30 +67,41 @@ function App() {
 
   return (
     <div className="flex flex-col items-center font-work-sans">
-      <div className="w-full md:w-[768px] p-6 space-y-12">
-        <div className="space-y-1.5">
-          <h1 className="text-3xl font-bold">equalshare</h1>
-          <p className="text-base">
-            Enter payments to split equally, see instant results.
-          </p>
-        </div>
-
-        <div className="flex flex-col gap-6">
-          <div className="w-full">
-            <NewContributionForm
-              contributions={contributions}
-              contributors={contributors}
-              onNewContribution={addContribution}
-            />
+      <div className="w-full md:w-[768px] p-6 space-y-24">
+        <div className="space-y-12">
+          <div className="space-y-1.5">
+            <h1 className="text-3xl font-bold">equalshare</h1>
+            <p className="text-base">
+              Enter payments to split equally, see instant results.
+            </p>
           </div>
 
-          <div className="space-y-3">
-            <h2 className="text-xl font-bold tracking-wide">Contributions</h2>
-            <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
-              {contributions.map((contribution, i) => (
-                <ContributionCard key={i} contribution={contribution} />
-              ))}
+          <div className="flex flex-col gap-6">
+            <div className="w-full">
+              <NewContributionForm
+                contributions={contributions}
+                contributors={contributors}
+                onNewContribution={addContribution}
+              />
             </div>
+
+            {contributions.length > 0 ? (
+              <div className="space-y-3">
+                <h2 className="text-xl font-bold tracking-wide">
+                  Contributions
+                </h2>
+                <div
+                  className={cn(
+                    'grid grid-cols-1 auto-rows-[1fr] gap-3',
+                    contributions.length > 1 ? 'md:grid-cols-2' : ''
+                  )}
+                >
+                  {contributions.map((contribution, i) => (
+                    <ContributionCard key={i} contribution={contribution} />
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
 
