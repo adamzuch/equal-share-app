@@ -60,7 +60,7 @@ export function Summary({
 
       <div className="space-y-1.5">
         <h2 className="text-xl font-bold tracking-wide">Settle debts</h2>
-        <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 auto-rows-[1fr] gap-3">
           {repayments.map((repayment, i) => (
             <RepaymentCard key={i} repayment={repayment} />
           ))}
