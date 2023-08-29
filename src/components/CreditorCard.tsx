@@ -5,12 +5,10 @@ import { getAvatarColor, getAvatarIcon } from '@/lib/avatar'
 export function CreditorCard({
   creditor,
   balance,
-  target,
   total,
 }: {
   creditor: string
   balance: number
-  target: number
   total: number
 }) {
   const CreditorIcon = getAvatarIcon(creditor)
@@ -25,10 +23,9 @@ export function CreditorCard({
           </AvatarFallback>
         </Avatar>
         <div className="flex-1 min-w-16">
-          {creditor} paid <span className="font-semibold">-${total}</span> and
-          must receive <span className="font-semibold">+${balance}</span> to
-          reach the equal share of{' '}
-          <span className="font-semibold">${target}</span>
+          {creditor} paid <span className="font-semibold">${total}</span> and
+          must receive <span className="font-semibold">${balance}</span> to
+          reach the equal share
         </div>
       </div>
     </Card>

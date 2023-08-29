@@ -20,10 +20,10 @@ export function Summary({
   return (
     <div className="space-y-12">
       <h2 className="text-2xl text-center">
-        <span className="font-bold">-${total}</span> contributed by{' '}
-        <span className="font-bold">{contributors.length} people</span> results
-        in an equal share of <span className="font-bold">-${target}</span> per
-        person
+        <span className="font-normal">${total}</span> paid by{' '}
+        <span className="font-normal">{contributors.length} people</span>{' '}
+        results in an equal share of{' '}
+        <span className="font-semibold">${target.toFixed(2)}</span>
       </h2>
 
       <div className="space-y-1.5">
@@ -37,7 +37,6 @@ export function Summary({
                 creditor={account.contributor}
                 balance={account.balance}
                 total={account.total}
-                target={target}
               />
             ))}
         </div>
@@ -54,7 +53,6 @@ export function Summary({
                 debtor={account.contributor}
                 balance={account.balance}
                 total={account.total}
-                target={target}
               />
             ))}
         </div>
