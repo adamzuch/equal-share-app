@@ -67,7 +67,7 @@ function App() {
 
   return (
     <div className="flex flex-col items-center font-work-sans">
-      <div className="w-full md:w-[768px] p-12 space-y-24">
+      <div className="w-full md:w-[768px] px-6 py-12 space-y-24">
         <div className="space-y-12">
           <div className="space-y-1.5">
             <h1 className="text-3xl font-bold">equalshare</h1>
