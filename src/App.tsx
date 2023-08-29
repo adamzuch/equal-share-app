@@ -26,8 +26,8 @@ function App() {
   ]
   const calculated = equalize(contributions, contributors)
 
-  console.log(contributions)
-  console.log(calculated)
+  // console.log(contributions)
+  // console.log(calculated)
 
   // const updateAmount = (i: number, value: string) => {
   //   const amount = isNaN(Number(value)) ? null : Number(value)
