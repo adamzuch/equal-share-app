@@ -88,7 +88,7 @@ export function NewContributionForm({
               control={form.control}
               name="amount"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-24">
                   <FormLabel htmlFor="amount">Amount</FormLabel>
                   <FormControl>
                     <div className="relative flex">
@@ -99,7 +99,7 @@ export function NewContributionForm({
                         {...field}
                         id="amount"
                         autoComplete="off"
-                        className="w-24 pl-7"
+                        className="pl-7"
                         placeholder="0.00"
                       />
                     </div>
