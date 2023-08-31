@@ -171,7 +171,7 @@ export function NewContributionForm({
                 contributor,
                 description: description ?? '',
               }}
-              isEditable={false}
+              editable={false}
             />
           </div>
         ) : null}

@@ -57,9 +57,9 @@ function App() {
   //   ])
   // }
 
-  // const deleteContribution = (i: number) => {
-  //   setContributions(contributions.filter((_, j) => i !== j))
-  // }
+  const deleteContribution = (i: number) => {
+    setContributions(contributions.filter((_, j) => i !== j))
+  }
 
   const addContribution = (contribution: Contribution) => {
     setContributions([contribution, ...contributions])
@@ -70,9 +70,11 @@ function App() {
       <div className="w-full md:w-[768px] px-6 py-12 space-y-24">
         <div className="space-y-12">
           <div className="space-y-1.5">
-            <h1 className="text-3xl font-bold">equalshare</h1>
+            <h1 className="text-3xl font-bold tracking-wide">equalshare</h1>
             <p className="text-base">
-              Enter payments to split equally, see instant results.
+              Effortlessly split group expenses and instantly settle debts.
+              {/* Share using a 24-hour link, with no data collected permanently and
+              no need for sign-up. */}
             </p>
           </div>
 
@@ -97,7 +99,15 @@ function App() {
                   )}
                 >
                   {contributions.map((contribution, i) => (
-                    <ContributionCard key={i} contribution={contribution} />
+                    <ContributionCard
+                      key={i}
+                      index={i}
+                      contribution={contribution}
+                      onEdit={() => {
+                        alert('edit dialog')
+                      }}
+                      onDelete={(i) => deleteContribution(i)}
+                    />
                   ))}
                 </div>
               </div>

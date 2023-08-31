@@ -3,15 +3,28 @@ import { Card } from './ui/card'
 import { Avatar, AvatarFallback } from './ui/avatar'
 
 import { getAvatarColor, getAvatarIcon } from '@/lib/avatar'
-import { MoreVertical } from 'lucide-react'
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu'
+import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
 import { Button } from './ui/button'
 
 export function ContributionCard({
+  index = -1,
   contribution,
-  isEditable = true,
+  editable = true,
+  onEdit,
+  onDelete,
 }: {
   contribution: Contribution
-  isEditable?: boolean
+  index?: number
+  editable?: boolean
+  onEdit?: (index: number) => void
+  onDelete?: (index: number) => void
 }) {
   const { amount, contributor, description } = contribution
 
@@ -36,10 +49,24 @@ export function ContributionCard({
           ) : null}
         </div>
       </div>
-      {isEditable ? (
-        <Button type="button" size="icon" variant="ghost">
-          <MoreVertical />
-        </Button>
+      {editable ? (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button type="button" size="icon" variant="ghost">
+              <MoreVertical />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => onEdit?.(index)}>
+              <Pencil className="mr-2 h-4 w-4" />
+              <span>Edit</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onDelete?.(index)}>
+              <Trash2 className="mr-2 h-4 w-4" />
+              <span>Delete</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       ) : null}
     </Card>
   )
