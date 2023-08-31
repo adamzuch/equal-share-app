@@ -18,9 +18,13 @@ export function Summary({
   target: number
   total: number
 }) {
-  const creditorAccounts = accounts.filter(({ balance }) => balance > 0)
+  const creditorAccounts = accounts
+    .filter(({ balance }) => balance > 0)
+    .sort((a, b) => b.balance - a.balance)
 
-  const debtorAccounts = accounts.filter(({ balance }) => balance < 0)
+  const debtorAccounts = accounts
+    .filter(({ balance }) => balance < 0)
+    .sort((a, b) => b.balance - a.balance)
 
   return (
     <div className="space-y-24">

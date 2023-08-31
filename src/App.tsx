@@ -19,8 +19,46 @@ const INITIAL_CONTRIBUTIONS: Contribution[] = [
   { amount: 15, contributor: 'Frank', description: '' },
 ]
 
+const TEST_CONTRIBUTIONS: Contribution[] = [
+  {
+    amount: 1,
+    contributor: 'Adam',
+    description: '',
+  },
+  {
+    amount: 3,
+    contributor: 'Assa',
+    description: '',
+  },
+  {
+    amount: 12,
+    contributor: 'aaron',
+    description: '',
+  },
+  {
+    amount: 23,
+    contributor: 'Adam',
+    description: '',
+  },
+  {
+    amount: 7,
+    contributor: 'Bill',
+    description: 'Bus fare',
+  },
+  {
+    amount: 5,
+    contributor: 'John',
+    description: 'Shared lunch',
+  },
+  {
+    amount: 15,
+    contributor: 'Frank',
+    description: '',
+  },
+]
+
 function App() {
-  const [contributions, setContributions] = useState(INITIAL_CONTRIBUTIONS)
+  const [contributions, setContributions] = useState(TEST_CONTRIBUTIONS)
   const contributors = [
     ...new Set(contributions.map((c) => c.contributor).filter((c) => c !== '')),
   ]
@@ -73,8 +111,8 @@ function App() {
             <h1 className="text-3xl font-bold tracking-wide">equalshare</h1>
             <p className="text-base">
               Effortlessly split group expenses and instantly settle debts.
-              {/* Share using a 24-hour link, with no data collected permanently and
-              no need for sign-up. */}
+              Share using a 24-hour link, with no data collected permanently and
+              no need for sign-up.
             </p>
           </div>
 
