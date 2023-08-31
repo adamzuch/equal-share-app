@@ -1,5 +1,5 @@
 import * as z from 'zod'
-import { useForm, useWatch } from 'react-hook-form'
+import { DefaultValues, useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import {
@@ -19,14 +19,21 @@ import { ContributionCard } from './ContributionCard'
 import { AutocompleteInput } from './ui/autocomplete'
 
 const formSchema = z.object({
-  amount: z.coerce
-    .number({
-      invalid_type_error: 'Must be a number',
-    })
-    .nonnegative('Amount cannot be negative'),
+  amount: z
+    .string()
+    .nonempty('Cannot be empty')
+    .pipe(
+      z.coerce
+        .number({
+          invalid_type_error: 'Must be a number',
+        })
+        .nonnegative('Amount cannot be negative')
+    ),
   contributor: z.string().nonempty('Cannot be empty'),
   description: z.string().optional(),
 })
+
+type FormType = z.infer<typeof formSchema>
 
 export function NewContributionForm({
   contributors,
@@ -36,14 +43,16 @@ export function NewContributionForm({
   contributors: string[]
   onNewContribution?: (contribution: Contribution) => void
 }) {
+  const formDefaultValues: DefaultValues<FormType> = {
+    // tell TS to shut up. It needs to be an empty string initially to get the behavior we want
+    amount: '' as never,
+    contributor: '',
+    description: '',
+  }
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      // silly types won't let me set an empty number field :)
-      amount: 0,
-      contributor: '',
-      description: '',
-    },
+    defaultValues: formDefaultValues,
   })
 
   function handleSubmit(data: z.infer<typeof formSchema>) {
@@ -62,19 +71,19 @@ export function NewContributionForm({
   const contributor = useWatch({
     control: form.control,
     name: 'contributor',
-    defaultValue: '',
+    defaultValue: formDefaultValues.contributor,
   })
 
   const amount = useWatch({
     control: form.control,
     name: 'amount',
-    defaultValue: 0,
+    defaultValue: formDefaultValues.amount,
   })
 
   const description = useWatch({
     control: form.control,
     name: 'description',
-    defaultValue: '',
+    defaultValue: formDefaultValues.description,
   })
 
   const showPreview = amount >= 0 && contributor !== ''
