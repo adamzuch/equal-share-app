@@ -14,9 +14,9 @@ import { Input } from './ui/input'
 import { Button } from './ui/button'
 
 import { type Contribution } from '../lib/equalize'
-import { ContributionCard } from './ContributionCard'
 
 import { AutocompleteInput } from './ui/autocomplete'
+import { ContributionCardPreview } from './ContributionCardPreview'
 
 const formSchema = z.object({
   amount: z
@@ -37,10 +37,10 @@ type FormType = z.infer<typeof formSchema>
 
 export function NewContributionForm({
   contributors,
-  onNewContribution,
+  onSubmit,
 }: {
   contributors: string[]
-  onNewContribution?: (contribution: Contribution) => void
+  onSubmit?: (contribution: Contribution) => void
 }) {
   const formDefaultValues: DefaultValues<FormType> = {
     // tell TS to shut up. It needs to be an empty string initially to get the behavior we want
@@ -61,7 +61,7 @@ export function NewContributionForm({
 
     const contribution = { amount, contributor, description }
 
-    onNewContribution?.(contribution)
+    onSubmit?.(contribution)
 
     form.reset()
     document.getElementById('amount')?.focus()
@@ -164,14 +164,12 @@ export function NewContributionForm({
 
         {showPreview ? (
           <div className="mt-6">
-            <ContributionCard
-              contributors={[]}
+            <ContributionCardPreview
               contribution={{
                 amount,
                 contributor,
                 description: description ?? '',
               }}
-              editable={false}
             />
           </div>
         ) : null}

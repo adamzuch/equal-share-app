@@ -13,10 +13,10 @@ import {
 import { Input } from './ui/input'
 
 import { type Contribution } from '../lib/equalize'
-import { ContributionCard } from './ContributionCard'
 
 import { AutocompleteInput } from './ui/autocomplete'
 import { Button } from './ui/button'
+import { ContributionCardPreview } from './ContributionCardPreview'
 
 const formSchema = z.object({
   amount: z
@@ -38,11 +38,13 @@ type FormType = z.infer<typeof formSchema>
 export function EditContributionForm({
   contribution,
   contributors,
-  onEditContribution,
+  onSubmit,
+  onCancel,
 }: {
   contribution: Contribution
   contributors: string[]
-  onEditContribution?: (contribution: Contribution) => void
+  onSubmit?: (contribution: Contribution) => void
+  onCancel?: () => void
 }) {
   const formDefaultValues: DefaultValues<FormType> = {
     amount: String(contribution.amount) as never,
@@ -62,7 +64,7 @@ export function EditContributionForm({
 
     const contribution = { amount, contributor, description }
 
-    onEditContribution?.(contribution)
+    onSubmit?.(contribution)
   }
 
   const contributor = useWatch({
@@ -162,15 +164,12 @@ export function EditContributionForm({
 
         {showPreview ? (
           <div className="mt-6">
-            {/* TODO: make a contribution preview component */}
-            <ContributionCard
-              contributors={[]}
+            <ContributionCardPreview
               contribution={{
                 amount,
                 contributor,
                 description: description ?? '',
               }}
-              editable={false}
             />
           </div>
         ) : null}
@@ -178,6 +177,9 @@ export function EditContributionForm({
         <div className="mt-6 flex flex-row-reverse items-center justify-start gap-3">
           <Button type="submit" variant="default">
             Save changes
+          </Button>
+          <Button type="button" variant="secondary" onClick={onCancel}>
+            Cancel
           </Button>
         </div>
       </form>

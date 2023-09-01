@@ -100,7 +100,7 @@ function App() {
             <div className="w-full">
               <NewContributionForm
                 contributors={contributors}
-                onNewContribution={addContribution}
+                onSubmit={addContribution}
               />
             </div>
 

@@ -17,17 +17,15 @@ import { EditContributionForm } from './EditContributionForm'
 import { useState } from 'react'
 
 export function ContributionCard({
-  index = -1,
   contribution,
   contributors,
-  editable = true,
+  index,
   onEdit,
   onDelete,
 }: {
-  contributors: string[]
   contribution: Contribution
-  index?: number
-  editable?: boolean
+  contributors: string[]
+  index: number
   onEdit?: (index: number, contribution: Contribution) => void
   onDelete?: (index: number) => void
 }) {
@@ -54,15 +52,14 @@ export function ContributionCard({
           ) : null}
         </div>
       </div>
-      {editable ? (
-        <EditDeleteMenu
-          contributors={contributors}
-          contribution={contribution}
-          index={index}
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
-      ) : null}
+
+      <EditDeleteMenu
+        contributors={contributors}
+        contribution={contribution}
+        index={index}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
     </Card>
   )
 }
@@ -108,10 +105,11 @@ const EditDeleteMenu = ({
         <EditContributionForm
           contribution={contribution}
           contributors={contributors}
-          onEditContribution={(contribution) => {
+          onSubmit={(contribution) => {
             onEdit?.(index, contribution)
             setShowDialog(false)
           }}
+          onCancel={() => setShowDialog(false)}
         />
       </DialogContent>
     </Dialog>
