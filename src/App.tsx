@@ -7,17 +7,17 @@ import { NewContributionForm } from './components/NewContributionForm'
 import { Contribution, equalize } from './lib/equalize'
 import { cn } from './lib/utils'
 
-const INITIAL_CONTRIBUTIONS: Contribution[] = [
-  { amount: 23, contributor: 'Adam', description: '' },
-  { amount: 7, contributor: 'Bill', description: 'Bus fare' },
-  { amount: 5, contributor: 'John', description: 'Shared lunch' },
-  {
-    amount: 52,
-    contributor: 'John',
-    description: 'Accomodation for London',
-  },
-  { amount: 15, contributor: 'Frank', description: '' },
-]
+// const INITIAL_CONTRIBUTIONS: Contribution[] = [
+//   { amount: 23, contributor: 'Adam', description: '' },
+//   { amount: 7, contributor: 'Bill', description: 'Bus fare' },
+//   { amount: 5, contributor: 'John', description: 'Shared lunch' },
+//   {
+//     amount: 52,
+//     contributor: 'John',
+//     description: 'Accomodation for London',
+//   },
+//   { amount: 15, contributor: 'Frank', description: '' },
+// ]
 
 const TEST_CONTRIBUTIONS: Contribution[] = [
   {
@@ -67,33 +67,13 @@ function App() {
   console.log(contributions)
   console.log(calculated)
 
-  // const updateAmount = (i: number, value: string) => {
-  //   const amount = isNaN(Number(value)) ? null : Number(value)
-  //   const updatedContribution = { ...contributions[i], amount }
-  //   setContributions([
-  //     ...contributions.slice(0, i),
-  //     updatedContribution,
-  //     ...contributions.slice(i + 1),
-  //   ])
-  // }
-
-  // const updateContributor = (i: number, value: string) => {
-  //   const updatedContribution = { ...contributions[i], contributor: value }
-  //   setContributions([
-  //     ...contributions.slice(0, i),
-  //     updatedContribution,
-  //     ...contributions.slice(i + 1),
-  //   ])
-  // }
-
-  // const updateDescription = (i: number, value: string) => {
-  //   const updatedContribution = { ...contributions[i], description: value }
-  //   setContributions([
-  //     ...contributions.slice(0, i),
-  //     updatedContribution,
-  //     ...contributions.slice(i + 1),
-  //   ])
-  // }
+  const updateContribution = (i: number, contribution: Contribution) => {
+    setContributions([
+      ...contributions.slice(0, i),
+      contribution,
+      ...contributions.slice(i + 1),
+    ])
+  }
 
   const deleteContribution = (i: number) => {
     setContributions(contributions.filter((_, j) => i !== j))
@@ -108,7 +88,7 @@ function App() {
       <div className="w-full md:w-[768px] px-6 py-12 space-y-24">
         <div className="space-y-12">
           <div className="space-y-1.5">
-            <h1 className="text-3xl font-bold tracking-wide">equalshare</h1>
+            <h1 className="text-3xl font-bold tracking-wider">equal share</h1>
             <p className="text-base">
               Effortlessly split group expenses and instantly settle debts.
               Share using a 24-hour link, with no data collected permanently and
@@ -119,7 +99,6 @@ function App() {
           <div className="flex flex-col gap-6">
             <div className="w-full">
               <NewContributionForm
-                contributions={contributions}
                 contributors={contributors}
                 onNewContribution={addContribution}
               />
@@ -138,12 +117,13 @@ function App() {
                 >
                   {contributions.map((contribution, i) => (
                     <ContributionCard
+                      contributors={contributors}
                       key={i}
                       index={i}
                       contribution={contribution}
-                      onEdit={() => {
-                        alert('edit dialog')
-                      }}
+                      onEdit={(i, contribution) =>
+                        updateContribution(i, contribution)
+                      }
                       onDelete={(i) => deleteContribution(i)}
                     />
                   ))}
