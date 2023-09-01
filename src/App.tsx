@@ -6,6 +6,8 @@ import { NewContributionForm } from './components/NewContributionForm'
 
 import { Contribution, equalize } from './lib/equalize'
 import { cn } from './lib/utils'
+import { Alert, AlertDescription, AlertTitle } from './components/ui/alert'
+import { Coins } from 'lucide-react'
 
 // const INITIAL_CONTRIBUTIONS: Contribution[] = [
 //   { amount: 23, contributor: 'Adam', description: '' },
@@ -58,7 +60,8 @@ const TEST_CONTRIBUTIONS: Contribution[] = [
 ]
 
 function App() {
-  const [contributions, setContributions] = useState(TEST_CONTRIBUTIONS)
+  const [contributions, setContributions] =
+    useState<Contribution[]>(TEST_CONTRIBUTIONS)
   const contributors = [
     ...new Set(contributions.map((c) => c.contributor).filter((c) => c !== '')),
   ]
@@ -104,11 +107,11 @@ function App() {
               />
             </div>
 
-            {contributions.length > 0 ? (
-              <div className="space-y-3">
-                <h2 className="text-xl font-bold tracking-wide">
-                  Contributions
-                </h2>
+            <div className="space-y-3">
+              <h2 className="text-xl font-bold tracking-wider">
+                Contributions
+              </h2>
+              {contributions.length > 0 ? (
                 <div
                   className={cn(
                     'grid grid-cols-1 auto-rows-[1fr] gap-3',
@@ -128,8 +131,16 @@ function App() {
                     />
                   ))}
                 </div>
-              </div>
-            ) : null}
+              ) : (
+                <Alert>
+                  <Coins className="h-4 w-4" />
+                  <AlertTitle>No contributions</AlertTitle>
+                  <AlertDescription>
+                    Add a contribution to get started.
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
           </div>
         </div>
 

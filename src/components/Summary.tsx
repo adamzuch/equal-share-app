@@ -1,9 +1,8 @@
 import { cn } from '@/lib/utils'
 import { Account, Repayment } from '../lib/equalize'
 
-import { CreditorCard } from './CreditorCard'
-import { DebtorCard } from './DebtorCard'
 import { RepaymentCard } from './RepaymentCard'
+import { AccountCard } from './AccountCard'
 
 export function Summary({
   accounts,
@@ -18,58 +17,34 @@ export function Summary({
   target: number
   total: number
 }) {
-  const creditorAccounts = accounts
-    .filter(({ balance }) => balance > 0)
+  const rankedAccounts = (accounts = accounts
     .sort((a, b) => b.balance - a.balance)
-
-  const debtorAccounts = accounts
-    .filter(({ balance }) => balance < 0)
-    .sort((a, b) => b.balance - a.balance)
+    .map((account) => ({
+      ...account,
+      rank: accounts.findIndex((a) => a.balance === account.balance) + 1,
+    })))
 
   return (
     <div className="space-y-24">
-      <div className="space-y-12">
-        <h2 className="text-2xl text-center">
-          <span className="font-semibold">${total}</span> paid by{' '}
-          <span className="font-semibold">{contributors.length} people</span>{' '}
-          results in an equal share of{' '}
-          <span className="font-semibold">${target.toFixed(2)}</span>
-        </h2>
-        {creditorAccounts.length > 0 ? (
-          <div className="space-y-1.5">
-            <h2 className="text-xl font-bold tracking-wide">Creditors</h2>
-            <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
-              {creditorAccounts.map((account) => (
-                <CreditorCard
-                  key={account.contributor}
-                  creditor={account.contributor}
-                  balance={account.balance}
-                  total={account.total}
-                />
-              ))}
-            </div>
-          </div>
-        ) : null}
-        {debtorAccounts.length > 0 ? (
-          <div className="space-y-1.5">
-            <h2 className="text-xl font-bold tracking-wide">Debtors</h2>
-            <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
-              {debtorAccounts.map((account) => (
-                <DebtorCard
-                  key={account.contributor}
-                  debtor={account.contributor}
-                  balance={account.balance}
-                  total={account.total}
-                />
-              ))}
-            </div>
-          </div>
-        ) : null}
+      <h2 className="text-2xl text-center">
+        <span className="font-semibold">${total}</span> paid by{' '}
+        <span className="font-semibold">{contributors.length} people</span>{' '}
+        results in an equal share of{' '}
+        <span className="font-semibold">${target.toFixed(2)}</span>
+      </h2>
+
+      <div className="space-y-1.5">
+        <h2 className="text-xl font-bold tracking-wider">Contributors</h2>
+        <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
+          {rankedAccounts.map((account) => (
+            <AccountCard key={account.contributor} {...account} />
+          ))}
+        </div>
       </div>
 
       {repayments.length > 0 ? (
         <div className="space-y-1.5">
-          <h2 className="text-xl font-bold tracking-wide">Settle debts</h2>
+          <h2 className="text-xl font-bold tracking-wider">Settle debts</h2>
           <div
             className={cn(
               'grid grid-cols-1 auto-rows-[1fr] gap-3',
