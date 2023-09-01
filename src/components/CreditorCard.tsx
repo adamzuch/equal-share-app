@@ -15,7 +15,7 @@ export function CreditorCard({
   const creditorColor = getAvatarColor(creditor)
 
   return (
-    <Card className="p-3">
+    <Card className="p-3 flex items-center">
       <div className="flex flex-row justify-between items-center gap-3">
         <Avatar>
           <AvatarFallback style={{ backgroundColor: creditorColor }}>
@@ -25,8 +25,8 @@ export function CreditorCard({
         <div className="flex-1 min-w-16">
           {creditor} paid <span className="font-semibold">${total}</span> and
           must receive{' '}
-          <span className="font-semibold">${balance.toFixed(2)}</span> to reach
-          the equal share
+          <span className="font-semibold">${balance.toFixed(2)}</span> to
+          decrease their contribution
         </div>
       </div>
     </Card>

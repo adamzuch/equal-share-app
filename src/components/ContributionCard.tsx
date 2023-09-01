@@ -3,15 +3,31 @@ import { Card } from './ui/card'
 import { Avatar, AvatarFallback } from './ui/avatar'
 
 import { getAvatarColor, getAvatarIcon } from '@/lib/avatar'
-import { MoreVertical } from 'lucide-react'
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu'
+import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
 import { Button } from './ui/button'
+import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
+import { EditContributionForm } from './EditContributionForm'
+import { useState } from 'react'
 
 export function ContributionCard({
   contribution,
-  isEditable = true,
+  contributors,
+  index,
+  onEdit,
+  onDelete,
 }: {
   contribution: Contribution
-  isEditable?: boolean
+  contributors: string[]
+  index: number
+  onEdit?: (index: number, contribution: Contribution) => void
+  onDelete?: (index: number) => void
 }) {
   const { amount, contributor, description } = contribution
 
@@ -36,11 +52,66 @@ export function ContributionCard({
           ) : null}
         </div>
       </div>
-      {isEditable ? (
-        <Button type="button" size="icon" variant="ghost">
-          <MoreVertical />
-        </Button>
-      ) : null}
+
+      <EditDeleteMenu
+        contributors={contributors}
+        contribution={contribution}
+        index={index}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
     </Card>
+  )
+}
+
+const EditDeleteMenu = ({
+  contribution,
+  index,
+  contributors,
+  onEdit,
+  onDelete,
+}: {
+  contributors: string[]
+  contribution: Contribution
+  index: number
+  onEdit?: (index: number, contribution: Contribution) => void
+  onDelete?: (index: number) => void
+}) => {
+  const [showDialog, setShowDialog] = useState(false)
+
+  return (
+    <Dialog open={showDialog} onOpenChange={setShowDialog}>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button type="button" size="icon" variant="ghost">
+            <MoreVertical />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DialogTrigger asChild>
+            <DropdownMenuItem>
+              <Pencil className="mr-2 h-4 w-4" />
+              <span>Edit</span>
+            </DropdownMenuItem>
+          </DialogTrigger>
+          <DropdownMenuItem onClick={() => onDelete?.(index)}>
+            <Trash2 className="mr-2 h-4 w-4" />
+            <span>Delete</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <DialogContent>
+        <EditContributionForm
+          contribution={contribution}
+          contributors={contributors}
+          onSubmit={(contribution) => {
+            onEdit?.(index, contribution)
+            setShowDialog(false)
+          }}
+          onCancel={() => setShowDialog(false)}
+        />
+      </DialogContent>
+    </Dialog>
   )
 }

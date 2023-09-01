@@ -15,7 +15,7 @@ export function DebtorCard({
   const debtorColor = getAvatarColor(debtor)
 
   return (
-    <Card className="p-3">
+    <Card className="p-3 flex items-center">
       <div className="flex flex-row justify-between items-center gap-3">
         <Avatar>
           <AvatarFallback style={{ backgroundColor: debtorColor }}>
@@ -26,7 +26,7 @@ export function DebtorCard({
           {debtor} paid <span className="font-semibold">${total}</span> and must
           pay a further{' '}
           <span className="font-semibold">${Math.abs(balance).toFixed(2)}</span>{' '}
-          to reach the equal share
+          to increase their contribution
         </div>
       </div>
     </Card>

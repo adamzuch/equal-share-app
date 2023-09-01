@@ -11,11 +11,11 @@ import {
   FormMessage,
 } from './ui/form'
 import { Input } from './ui/input'
-import { Button } from './ui/button'
 
 import { type Contribution } from '../lib/equalize'
 
 import { AutocompleteInput } from './ui/autocomplete'
+import { Button } from './ui/button'
 import { ContributionCardPreview } from './ContributionCardPreview'
 
 const formSchema = z.object({
@@ -35,18 +35,21 @@ const formSchema = z.object({
 
 type FormType = z.infer<typeof formSchema>
 
-export function NewContributionForm({
+export function EditContributionForm({
+  contribution,
   contributors,
   onSubmit,
+  onCancel,
 }: {
+  contribution: Contribution
   contributors: string[]
   onSubmit?: (contribution: Contribution) => void
+  onCancel?: () => void
 }) {
   const formDefaultValues: DefaultValues<FormType> = {
-    // tell TS to shut up. It needs to be an empty string initially to get the behavior we want
-    amount: '' as never,
-    contributor: '',
-    description: '',
+    amount: String(contribution.amount) as never,
+    contributor: contribution.contributor,
+    description: contribution.description,
   }
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -62,9 +65,6 @@ export function NewContributionForm({
     const contribution = { amount, contributor, description }
 
     onSubmit?.(contribution)
-
-    form.reset()
-    document.getElementById('amount')?.focus()
   }
 
   const contributor = useWatch({
@@ -90,7 +90,7 @@ export function NewContributionForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <div className="flex flex-col sm:flex-row gap-3 w-full">
+        <div className="flex flex-col gap-3 w-full">
           <div className="flex gap-3">
             <FormField
               control={form.control}
@@ -176,9 +176,9 @@ export function NewContributionForm({
 
         <div className="mt-6 flex flex-row-reverse items-center justify-start gap-3">
           <Button type="submit" variant="default">
-            Add contribution
+            Save changes
           </Button>
-          <Button type="reset" variant="secondary" onClick={() => form.reset()}>
+          <Button type="button" variant="secondary" onClick={onCancel}>
             Cancel
           </Button>
         </div>
