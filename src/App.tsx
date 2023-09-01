@@ -91,7 +91,9 @@ function App() {
       <div className="w-full md:w-[768px] px-6 py-12 space-y-24">
         <div className="space-y-12">
           <div className="space-y-1.5">
-            <h1 className="text-3xl font-bold tracking-wider">equal share</h1>
+            <h1 className="text-4xl font-extrabold font-montserrat">
+              equal share
+            </h1>
             <p className="text-base">
               Effortlessly split group expenses and instantly settle debts.
               Share using a 24-hour link, with no data collected permanently and
@@ -108,7 +110,7 @@ function App() {
             </div>
 
             <div className="space-y-3">
-              <h2 className="text-xl font-bold tracking-wider">
+              <h2 className="text-2xl font-bold font-montserrat tracking-wide">
                 Contributions
               </h2>
               {contributions.length > 0 ? (

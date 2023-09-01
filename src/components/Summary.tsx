@@ -3,6 +3,8 @@ import { Account, Repayment } from '../lib/equalize'
 
 import { RepaymentCard } from './RepaymentCard'
 import { AccountCard } from './AccountCard'
+import { Alert, AlertDescription, AlertTitle } from './ui/alert'
+import { Bird, Smile } from 'lucide-react'
 
 export function Summary({
   accounts,
@@ -26,15 +28,17 @@ export function Summary({
 
   return (
     <div className="space-y-24">
-      <h2 className="text-2xl text-center">
+      <h2 className="text-3xl text-center">
         <span className="font-semibold">${total}</span> paid by{' '}
         <span className="font-semibold">{contributors.length} people</span>{' '}
         results in an equal share of{' '}
         <span className="font-semibold">${target.toFixed(2)}</span>
       </h2>
 
-      <div className="space-y-1.5">
-        <h2 className="text-xl font-bold tracking-wider">Contributors</h2>
+      <div className="space-y-3">
+        <h2 className="text-2xl font-bold font-montserrat tracking-wide">
+          Contributors
+        </h2>
         <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
           {rankedAccounts.map((account) => (
             <AccountCard key={account.contributor} {...account} />
@@ -42,21 +46,26 @@ export function Summary({
         </div>
       </div>
 
-      {repayments.length > 0 ? (
-        <div className="space-y-1.5">
-          <h2 className="text-xl font-bold tracking-wider">Settle debts</h2>
-          <div
-            className={cn(
-              'grid grid-cols-1 auto-rows-[1fr] gap-3',
-              repayments.length > 1 ? 'md:grid-cols-2' : ''
-            )}
-          >
+      <div className="space-y-3">
+        <h2 className="text-2xl font-bold font-montserrat tracking-wide">
+          Settle debts
+        </h2>
+        {repayments.length > 0 ? (
+          <div className={cn('grid grid-cols-1 auto-rows-[1fr] gap-3')}>
             {repayments.map((repayment, i) => (
               <RepaymentCard key={i} repayment={repayment} />
             ))}
           </div>
-        </div>
-      ) : null}
+        ) : (
+          <Alert>
+            <Smile className="h-4 w-4" />
+            <AlertTitle>No debts to settle</AlertTitle>
+            <AlertDescription>
+              Contributions are already balanced
+            </AlertDescription>
+          </Alert>
+        )}
+      </div>
     </div>
   )
 }
