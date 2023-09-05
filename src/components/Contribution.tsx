@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-import type { ContributionType } from '@/lib/equalize'
+import type { ContributionType } from '@/lib/calculate-summary'
 import { EditContribution } from '@/components/forms/EditContribution'
 import { ContributorAvatar } from '@/components/ContributorAvatar'
 

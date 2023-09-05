@@ -1,7 +1,9 @@
-import * as z from 'zod'
 import { DefaultValues, useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { Input } from '@/components/ui/input'
+import { AutocompleteInput } from '@/components/ui/autocomplete'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -9,19 +11,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../ui/form'
-import { Input } from '../ui/input'
+} from '@/components/ui/form'
 
-import { type ContributionType } from '../../lib/equalize'
+import type { ContributionType } from '@/lib/calculate-summary'
+import { ContributionPreview } from '@/components/ContributionPreview'
 
-import { AutocompleteInput } from '../ui/autocomplete'
-import { Button } from '../ui/button'
-import { ContributionPreview } from '../ContributionPreview'
-
-import {
-  contributionSchema,
-  type ContributionForm,
-} from './contribution-schema'
+import type { ContributionForm } from './contribution-schema'
+import { contributionSchema } from './contribution-schema'
 
 export function EditContribution({
   contribution,
@@ -40,12 +36,12 @@ export function EditContribution({
     description: contribution.description,
   }
 
-  const form = useForm<z.infer<typeof contributionSchema>>({
+  const form = useForm<ContributionForm>({
     resolver: zodResolver(contributionSchema),
     defaultValues: formDefaultValues,
   })
 
-  function handleSubmit(data: z.infer<typeof contributionSchema>) {
+  function handleSubmit(data: ContributionForm) {
     const amount = data.amount
     const contributor = data.contributor
     const description = data.description ?? ''

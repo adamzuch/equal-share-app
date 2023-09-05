@@ -1,11 +1,10 @@
 import { useState } from 'react'
 
-import { Summary } from './components/Summary'
-import { NewContribution } from './components/forms/NewContribution'
-import { Contribution } from './components/Contribution'
-
-import { ContributionType, equalize } from './lib/equalize'
-import { cn } from './lib/utils'
+import { ContributionType, calculateSummary } from '@/lib/calculate-summary'
+import { NewContribution } from '@/components/forms/NewContribution'
+import { Summary } from '@/components/Summary'
+import { Contributions } from '@/components/Contributions'
+import { Header } from '@/components/Header'
 
 // const INITIAL_CONTRIBUTIONS: Contribution[] = [
 //   { amount: 23, contributor: 'Adam', description: '' },
@@ -19,53 +18,50 @@ import { cn } from './lib/utils'
 //   { amount: 15, contributor: 'Frank', description: '' },
 // ]
 
-const TEST_CONTRIBUTIONS: ContributionType[] = [
-  {
-    amount: 1,
-    contributor: 'Adam',
-    description: '',
-  },
-  {
-    amount: 3,
-    contributor: 'Assa',
-    description: '',
-  },
-  {
-    amount: 12,
-    contributor: 'aaron',
-    description: '',
-  },
-  {
-    amount: 23,
-    contributor: 'Adam',
-    description: '',
-  },
-  {
-    amount: 7,
-    contributor: 'Bill',
-    description: 'Bus fare',
-  },
-  {
-    amount: 5,
-    contributor: 'John',
-    description: 'Shared lunch',
-  },
-  {
-    amount: 15,
-    contributor: 'Frank',
-    description: '',
-  },
-]
+// const TEST_CONTRIBUTIONS: ContributionType[] = [
+//   {
+//     amount: 1,
+//     contributor: 'Adam',
+//     description: '',
+//   },
+//   {
+//     amount: 3,
+//     contributor: 'Assa',
+//     description: '',
+//   },
+//   {
+//     amount: 12,
+//     contributor: 'aaron',
+//     description: '',
+//   },
+//   {
+//     amount: 23,
+//     contributor: 'Adam',
+//     description: '',
+//   },
+//   {
+//     amount: 7,
+//     contributor: 'Bill',
+//     description: 'Bus fare',
+//   },
+//   {
+//     amount: 5,
+//     contributor: 'John',
+//     description: 'Shared lunch',
+//   },
+//   {
+//     amount: 15,
+//     contributor: 'Frank',
+//     description: '',
+//   },
+// ]
 
 function App() {
   const [contributions, setContributions] = useState<ContributionType[]>([])
   const contributors = [
     ...new Set(contributions.map((c) => c.contributor).filter((c) => c !== '')),
   ]
-  const calculated = equalize(contributions, contributors)
-
-  console.log(contributions)
-  console.log(calculated)
+  const summary = calculateSummary(contributions, contributors)
 
   const updateContribution = (i: number, contribution: ContributionType) => {
     setContributions([
@@ -87,16 +83,7 @@ function App() {
     <div className="flex flex-col items-center font-work-sans">
       <div className="w-full md:w-[768px] px-6 py-12 space-y-24">
         <div className="space-y-12">
-          <div className="space-y-1.5">
-            <h1 className="text-3xl font-bold font-montserrat tracking-wide">
-              equal share
-            </h1>
-            <p className="text-base">
-              Effortlessly split group expenses and instantly settle debts.
-              Share using a 24-hour link, with no data collected permanently and
-              no need for sign-up.
-            </p>
-          </div>
+          <Header />
 
           <div className="flex flex-col gap-3">
             <div className="w-full">
@@ -107,26 +94,18 @@ function App() {
             </div>
 
             {contributions.length > 0 ? (
-              <div className={cn('px-6 grid grid-cols-1 auto-rows-[1fr]')}>
-                {contributions.map((contribution, i) => (
-                  <Contribution
-                    contributors={contributors}
-                    key={i}
-                    index={i}
-                    contribution={contribution}
-                    onEdit={(i, contribution) =>
-                      updateContribution(i, contribution)
-                    }
-                    onDelete={(i) => deleteContribution(i)}
-                  />
-                ))}
-              </div>
+              <Contributions
+                contributions={contributions}
+                contributors={contributors}
+                updateContribution={updateContribution}
+                deleteContribution={deleteContribution}
+              />
             ) : null}
           </div>
         </div>
 
-        {calculated !== null ? (
-          <Summary contributors={contributors} {...calculated} />
+        {summary !== null ? (
+          <Summary contributors={contributors} {...summary} />
         ) : null}
       </div>
     </div>

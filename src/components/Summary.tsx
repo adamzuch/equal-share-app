@@ -3,7 +3,7 @@ import { Smile } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
-import type { AccountType, RepaymentType } from '@/lib/equalize'
+import type { AccountType, RepaymentType } from '@/lib/calculate-summary'
 import { Repayment } from '@/components/Repayment'
 import { Account } from '@/components/Account'
 

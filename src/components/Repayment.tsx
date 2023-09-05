@@ -2,7 +2,7 @@ import { ArrowRight } from 'lucide-react'
 
 import { Card } from '@/components/ui/card'
 
-import { RepaymentType } from '@/lib/equalize'
+import { RepaymentType } from '@/lib/calculate-summary'
 import { ContributorAvatar } from '@/components/ContributorAvatar'
 
 export function Repayment({ repayment }: { repayment: RepaymentType }) {

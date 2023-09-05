@@ -1,4 +1,4 @@
-import { ContributionType } from '@/lib/equalize'
+import { ContributionType } from '@/lib/calculate-summary'
 import { ContributorAvatar } from '@/components/ContributorAvatar'
 
 export function ContributionPreview({

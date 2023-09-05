@@ -16,7 +16,7 @@ export type RepaymentType = {
   amount: number
 }
 
-export function equalize(
+export function calculateSummary(
   contributions: ContributionType[],
   contributors: string[]
 ) {
