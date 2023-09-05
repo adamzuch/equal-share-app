@@ -1,47 +1,38 @@
-import { Contribution } from '@/lib/equalize'
-import { Card } from './ui/card'
-import { Avatar, AvatarFallback } from './ui/avatar'
+import { useState } from 'react'
+import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
 
-import { getAvatarColor, getAvatarIcon } from '@/lib/avatar'
-
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from './ui/dropdown-menu'
-import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
-import { Button } from './ui/button'
-import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
-import { EditContributionForm } from './EditContributionForm'
-import { useState } from 'react'
+} from '@/components/ui/dropdown-menu'
 
-export function ContributionCard({
+import type { ContributionType } from '@/lib/equalize'
+import { EditContribution } from '@/components/forms/EditContribution'
+import { ContributorAvatar } from '@/components/ContributorAvatar'
+
+export function Contribution({
   contribution,
   contributors,
   index,
   onEdit,
   onDelete,
 }: {
-  contribution: Contribution
+  contribution: ContributionType
   contributors: string[]
   index: number
-  onEdit?: (index: number, contribution: Contribution) => void
+  onEdit?: (index: number, contribution: ContributionType) => void
   onDelete?: (index: number) => void
 }) {
   const { amount, contributor, description } = contribution
 
-  const Icon = getAvatarIcon(contributor)
-  const iconColor = getAvatarColor(contributor)
-
   return (
-    <Card className="p-3 flex items-center gap-3">
+    <div className="p-3 flex items-center gap-3">
       <div className="flex-1 min-w-0 flex items-center gap-3">
-        <Avatar>
-          <AvatarFallback style={{ backgroundColor: iconColor }}>
-            <Icon />
-          </AvatarFallback>
-        </Avatar>
+        <ContributorAvatar contributor={contributor} />
         <div className="flex-1 min-w-0 truncate">
           {contributor} paid <span className="font-semibold">${amount}</span>
           {description ? (
@@ -60,7 +51,7 @@ export function ContributionCard({
         onEdit={onEdit}
         onDelete={onDelete}
       />
-    </Card>
+    </div>
   )
 }
 
@@ -72,9 +63,9 @@ const EditDeleteMenu = ({
   onDelete,
 }: {
   contributors: string[]
-  contribution: Contribution
+  contribution: ContributionType
   index: number
-  onEdit?: (index: number, contribution: Contribution) => void
+  onEdit?: (index: number, contribution: ContributionType) => void
   onDelete?: (index: number) => void
 }) => {
   const [showDialog, setShowDialog] = useState(false)
@@ -102,7 +93,7 @@ const EditDeleteMenu = ({
       </DropdownMenu>
 
       <DialogContent>
-        <EditContributionForm
+        <EditContribution
           contribution={contribution}
           contributors={contributors}
           onSubmit={(contribution) => {

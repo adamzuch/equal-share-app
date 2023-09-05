@@ -1,13 +1,11 @@
 import { useState } from 'react'
 
 import { Summary } from './components/Summary'
-import { ContributionCard } from './components/ContributionCard'
-import { NewContributionForm } from './components/NewContributionForm'
+import { NewContribution } from './components/forms/NewContribution'
+import { Contribution } from './components/Contribution'
 
-import { Contribution, equalize } from './lib/equalize'
+import { ContributionType, equalize } from './lib/equalize'
 import { cn } from './lib/utils'
-import { Alert, AlertDescription, AlertTitle } from './components/ui/alert'
-import { Coins } from 'lucide-react'
 
 // const INITIAL_CONTRIBUTIONS: Contribution[] = [
 //   { amount: 23, contributor: 'Adam', description: '' },
@@ -21,7 +19,7 @@ import { Coins } from 'lucide-react'
 //   { amount: 15, contributor: 'Frank', description: '' },
 // ]
 
-const TEST_CONTRIBUTIONS: Contribution[] = [
+const TEST_CONTRIBUTIONS: ContributionType[] = [
   {
     amount: 1,
     contributor: 'Adam',
@@ -60,8 +58,7 @@ const TEST_CONTRIBUTIONS: Contribution[] = [
 ]
 
 function App() {
-  const [contributions, setContributions] =
-    useState<Contribution[]>(TEST_CONTRIBUTIONS)
+  const [contributions, setContributions] = useState<ContributionType[]>([])
   const contributors = [
     ...new Set(contributions.map((c) => c.contributor).filter((c) => c !== '')),
   ]
@@ -70,7 +67,7 @@ function App() {
   console.log(contributions)
   console.log(calculated)
 
-  const updateContribution = (i: number, contribution: Contribution) => {
+  const updateContribution = (i: number, contribution: ContributionType) => {
     setContributions([
       ...contributions.slice(0, i),
       contribution,
@@ -82,7 +79,7 @@ function App() {
     setContributions(contributions.filter((_, j) => i !== j))
   }
 
-  const addContribution = (contribution: Contribution) => {
+  const addContribution = (contribution: ContributionType) => {
     setContributions([contribution, ...contributions])
   }
 
@@ -91,7 +88,7 @@ function App() {
       <div className="w-full md:w-[768px] px-6 py-12 space-y-24">
         <div className="space-y-12">
           <div className="space-y-1.5">
-            <h1 className="text-4xl font-extrabold font-montserrat">
+            <h1 className="text-3xl font-bold font-montserrat tracking-wide">
               equal share
             </h1>
             <p className="text-base">
@@ -101,48 +98,30 @@ function App() {
             </p>
           </div>
 
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-3">
             <div className="w-full">
-              <NewContributionForm
+              <NewContribution
                 contributors={contributors}
                 onSubmit={addContribution}
               />
             </div>
 
-            <div className="space-y-3">
-              <h2 className="text-2xl font-bold font-montserrat tracking-wide">
-                Contributions
-              </h2>
-              {contributions.length > 0 ? (
-                <div
-                  className={cn(
-                    'grid grid-cols-1 auto-rows-[1fr] gap-3',
-                    contributions.length > 1 ? 'md:grid-cols-2' : ''
-                  )}
-                >
-                  {contributions.map((contribution, i) => (
-                    <ContributionCard
-                      contributors={contributors}
-                      key={i}
-                      index={i}
-                      contribution={contribution}
-                      onEdit={(i, contribution) =>
-                        updateContribution(i, contribution)
-                      }
-                      onDelete={(i) => deleteContribution(i)}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <Alert>
-                  <Coins className="h-4 w-4" />
-                  <AlertTitle>No contributions</AlertTitle>
-                  <AlertDescription>
-                    Add a contribution to get started.
-                  </AlertDescription>
-                </Alert>
-              )}
-            </div>
+            {contributions.length > 0 ? (
+              <div className={cn('px-6 grid grid-cols-1 auto-rows-[1fr]')}>
+                {contributions.map((contribution, i) => (
+                  <Contribution
+                    contributors={contributors}
+                    key={i}
+                    index={i}
+                    contribution={contribution}
+                    onEdit={(i, contribution) =>
+                      updateContribution(i, contribution)
+                    }
+                    onDelete={(i) => deleteContribution(i)}
+                  />
+                ))}
+              </div>
+            ) : null}
           </div>
         </div>
 

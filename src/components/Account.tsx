@@ -1,8 +1,6 @@
-import { Card } from './ui/card'
-import { Avatar, AvatarFallback } from './ui/avatar'
-import { getAvatarColor, getAvatarIcon } from '@/lib/avatar'
+import { ContributorAvatar } from '@/components/ContributorAvatar'
 
-export function AccountCard({
+export function Account({
   contributor,
   balance,
   total,
@@ -13,9 +11,6 @@ export function AccountCard({
   total: number
   rank: number
 }) {
-  const Icon = getAvatarIcon(contributor)
-  const color = getAvatarColor(contributor)
-
   let AccountDescription = CreditorDescription
   if (balance === 0) {
     AccountDescription = BalancedDescription
@@ -24,13 +19,10 @@ export function AccountCard({
   }
 
   return (
-    <Card className="p-3 flex items-center">
+    <div className="p-3 flex items-center">
       <div className="flex flex-row justify-between items-center gap-3 w-full">
-        <Avatar>
-          <AvatarFallback style={{ backgroundColor: color }}>
-            <Icon />
-          </AvatarFallback>
-        </Avatar>
+        <div className="text-sm text-muted-foreground">#{rank}</div>
+        <ContributorAvatar contributor={contributor} />
         <div className="flex-1 min-w-16">
           <AccountDescription
             contributor={contributor}
@@ -38,9 +30,8 @@ export function AccountCard({
             total={total}
           />
         </div>
-        <div className="text-sm text-muted-foreground">#{rank}</div>
       </div>
-    </Card>
+    </div>
   )
 }
 

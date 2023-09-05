@@ -1,10 +1,11 @@
-import { cn } from '@/lib/utils'
-import { Account, Repayment } from '../lib/equalize'
+import { Smile } from 'lucide-react'
 
-import { RepaymentCard } from './RepaymentCard'
-import { AccountCard } from './AccountCard'
-import { Alert, AlertDescription, AlertTitle } from './ui/alert'
-import { Bird, Smile } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+
+import type { AccountType, RepaymentType } from '@/lib/equalize'
+import { Repayment } from '@/components/Repayment'
+import { Account } from '@/components/Account'
 
 export function Summary({
   accounts,
@@ -13,9 +14,9 @@ export function Summary({
   target,
   total,
 }: {
-  accounts: Account[]
+  accounts: AccountType[]
   contributors: string[]
-  repayments: Repayment[]
+  repayments: RepaymentType[]
   target: number
   total: number
 }) {
@@ -28,7 +29,7 @@ export function Summary({
 
   return (
     <div className="space-y-24">
-      <h2 className="text-3xl text-center">
+      <h2 className="text-2xl text-center">
         <span className="font-semibold">${total}</span> paid by{' '}
         <span className="font-semibold">{contributors.length} people</span>{' '}
         results in an equal share of{' '}
@@ -36,24 +37,24 @@ export function Summary({
       </h2>
 
       <div className="space-y-3">
-        <h2 className="text-2xl font-bold font-montserrat tracking-wide">
+        <h2 className="text-xl font-bold font-montserrat tracking-wide">
           Contributors
         </h2>
         <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
           {rankedAccounts.map((account) => (
-            <AccountCard key={account.contributor} {...account} />
+            <Account key={account.contributor} {...account} />
           ))}
         </div>
       </div>
 
       <div className="space-y-3">
-        <h2 className="text-2xl font-bold font-montserrat tracking-wide">
+        <h2 className="text-xl font-bold font-montserrat tracking-wide">
           Settle debts
         </h2>
         {repayments.length > 0 ? (
           <div className={cn('grid grid-cols-1 auto-rows-[1fr] gap-3')}>
             {repayments.map((repayment, i) => (
-              <RepaymentCard key={i} repayment={repayment} />
+              <Repayment key={i} repayment={repayment} />
             ))}
           </div>
         ) : (
