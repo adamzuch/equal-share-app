@@ -28,26 +28,26 @@ export function Summary({
     })))
 
   return (
-    <div className="space-y-24">
-      <h2 className="text-2xl text-center">
+    <div className="flex flex-col items-center space-y-12">
+      <div className="w-screen text-2xl text-center p-6 py-16 bg-slate-100  rounded-md">
         <span className="font-semibold">${total}</span> paid by{' '}
         <span className="font-semibold">{contributors.length} people</span>{' '}
         results in an equal share of{' '}
         <span className="font-semibold">${target.toFixed(2)}</span>
-      </h2>
+      </div>
 
-      <div className="space-y-3">
+      <div className="px-6 w-full md:w-[768px] space-y-3">
         <h2 className="text-xl font-bold font-montserrat tracking-wide">
           Contributors
         </h2>
-        <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
+        <div className="grid grid-cols-1 auto-rows-[1fr]">
           {rankedAccounts.map((account) => (
             <Account key={account.contributor} {...account} />
           ))}
         </div>
       </div>
 
-      <div className="space-y-3">
+      <div className="px-6 w-full md:w-[768px] space-y-3">
         <h2 className="text-xl font-bold font-montserrat tracking-wide">
           Settle debts
         </h2>

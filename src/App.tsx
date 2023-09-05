@@ -18,46 +18,47 @@ import { Header } from '@/components/Header'
 //   { amount: 15, contributor: 'Frank', description: '' },
 // ]
 
-// const TEST_CONTRIBUTIONS: ContributionType[] = [
-//   {
-//     amount: 1,
-//     contributor: 'Adam',
-//     description: '',
-//   },
-//   {
-//     amount: 3,
-//     contributor: 'Assa',
-//     description: '',
-//   },
-//   {
-//     amount: 12,
-//     contributor: 'aaron',
-//     description: '',
-//   },
-//   {
-//     amount: 23,
-//     contributor: 'Adam',
-//     description: '',
-//   },
-//   {
-//     amount: 7,
-//     contributor: 'Bill',
-//     description: 'Bus fare',
-//   },
-//   {
-//     amount: 5,
-//     contributor: 'John',
-//     description: 'Shared lunch',
-//   },
-//   {
-//     amount: 15,
-//     contributor: 'Frank',
-//     description: '',
-//   },
-// ]
+const TEST_CONTRIBUTIONS: ContributionType[] = [
+  {
+    amount: 1,
+    contributor: 'Adam',
+    description: '',
+  },
+  {
+    amount: 3,
+    contributor: 'Assa',
+    description: '',
+  },
+  {
+    amount: 12,
+    contributor: 'aaron',
+    description: '',
+  },
+  {
+    amount: 23,
+    contributor: 'Adam',
+    description: '',
+  },
+  {
+    amount: 7,
+    contributor: 'Bill',
+    description: 'Bus fare',
+  },
+  {
+    amount: 5,
+    contributor: 'John',
+    description: 'Shared lunch',
+  },
+  {
+    amount: 15,
+    contributor: 'Frank',
+    description: '',
+  },
+]
 
 function App() {
-  const [contributions, setContributions] = useState<ContributionType[]>([])
+  const [contributions, setContributions] =
+    useState<ContributionType[]>(TEST_CONTRIBUTIONS)
   const contributors = [
     ...new Set(contributions.map((c) => c.contributor).filter((c) => c !== '')),
   ]
@@ -80,34 +81,32 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col items-center font-work-sans">
-      <div className="w-full md:w-[768px] px-6 py-12 space-y-24">
-        <div className="space-y-12">
-          <Header />
+    <div className="font-work-sans flex flex-col items-center py-12 space-y-12 overflow-x-hidden">
+      <div className="space-y-12 px-6 w-full md:w-[768px]">
+        <Header />
 
-          <div className="flex flex-col gap-3">
-            <div className="w-full">
-              <NewContribution
-                contributors={contributors}
-                onSubmit={addContribution}
-              />
-            </div>
-
-            {contributions.length > 0 ? (
-              <Contributions
-                contributions={contributions}
-                contributors={contributors}
-                updateContribution={updateContribution}
-                deleteContribution={deleteContribution}
-              />
-            ) : null}
+        <div className="flex flex-col gap-3">
+          <div className="w-full">
+            <NewContribution
+              contributors={contributors}
+              onSubmit={addContribution}
+            />
           </div>
-        </div>
 
-        {summary !== null ? (
-          <Summary contributors={contributors} {...summary} />
-        ) : null}
+          {contributions.length > 0 ? (
+            <Contributions
+              contributions={contributions}
+              contributors={contributors}
+              updateContribution={updateContribution}
+              deleteContribution={deleteContribution}
+            />
+          ) : null}
+        </div>
       </div>
+
+      {summary !== null ? (
+        <Summary contributors={contributors} {...summary} />
+      ) : null}
     </div>
   )
 }
