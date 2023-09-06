@@ -96,12 +96,13 @@ function calculateRepayments(accounts: AccountType[]): RepaymentType[] {
       Math.min(Math.abs(balance1.value), Math.abs(balance2.value))
     )
 
-    balances[0][1] = balances[0][1]
-      .multiply(paymentAmount)
-      .multiply(balance1.value > 0 ? -1 : 1)
-    balances[i][1] = balances[i][1]
-      .multiply(paymentAmount)
-      .multiply(balance2.value > 0 ? -1 : 1)
+    balances[0][1] = balances[0][1].add(
+      paymentAmount.multiply(balance1.value > 0 ? -1 : 1)
+    )
+
+    balances[i][1] = balances[i][1].add(
+      paymentAmount.multiply(balance2.value > 0 ? -1 : 1)
+    )
 
     // record transaction
     repayments.push({
