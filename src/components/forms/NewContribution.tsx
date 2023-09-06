@@ -1,5 +1,6 @@
 import { DefaultValues, useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import currency from 'currency.js'
 
 import { Input } from '@/components/ui/input'
 import { AutocompleteInput } from '@/components/ui/autocomplete'
@@ -39,7 +40,7 @@ export function NewContribution({
   })
 
   function handleSubmit(data: ContributionForm) {
-    const amount = data.amount
+    const amount = currency(data.amount).value
     const contributor = data.contributor
     const description = data.description ?? ''
 
@@ -69,7 +70,8 @@ export function NewContribution({
     defaultValue: formDefaultValues.description,
   })
 
-  const showPreview = amount >= 0 && contributor !== ''
+  const showPreview =
+    amount !== ('' as never) && amount >= 0 && contributor !== ''
 
   return (
     <Form {...form}>
@@ -154,7 +156,7 @@ export function NewContribution({
             <FormLabel>Preview</FormLabel>
             <ContributionPreview
               contribution={{
-                amount,
+                amount: amount !== null ? currency(amount).value : null,
                 contributor,
                 description: description ?? '',
               }}
