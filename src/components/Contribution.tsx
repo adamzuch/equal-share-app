@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import {
   DropdownMenu,
@@ -30,7 +31,7 @@ export function Contribution({
   const { amount, contributor, description } = contribution
 
   return (
-    <div className="p-3 flex items-center gap-3">
+    <Card className="p-3 flex items-center gap-3">
       <div className="flex-1 min-w-0 flex items-center gap-3">
         <ContributorAvatar contributor={contributor} />
         <div className="flex-1 min-w-0 truncate">
@@ -51,7 +52,7 @@ export function Contribution({
         onEdit={onEdit}
         onDelete={onDelete}
       />
-    </div>
+    </Card>
   )
 }
 

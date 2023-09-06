@@ -1,3 +1,5 @@
+import { Card } from '@/components/ui/card'
+
 import { ContributionType } from '@/lib/calculate-summary'
 import { ContributorAvatar } from '@/components/ContributorAvatar'
 
@@ -9,7 +11,7 @@ export function ContributionPreview({
   const { amount, contributor, description } = contribution
 
   return (
-    <div className="p-3 flex items-center gap-3">
+    <Card className="p-3 flex items-center gap-3">
       <ContributorAvatar contributor={contributor} />
       <div className=" truncate">
         {contributor} paid <span className="font-semibold">${amount}</span>
@@ -20,6 +22,6 @@ export function ContributionPreview({
           </span>
         ) : null}
       </div>
-    </div>
+    </Card>
   )
 }

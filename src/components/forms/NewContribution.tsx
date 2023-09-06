@@ -2,7 +2,6 @@ import { DefaultValues, useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Input } from '@/components/ui/input'
-import { Card } from '@/components/ui/card'
 import { AutocompleteInput } from '@/components/ui/autocomplete'
 import { Button } from '@/components/ui/button'
 import {
@@ -73,75 +72,50 @@ export function NewContribution({
   const showPreview = amount >= 0 && contributor !== ''
 
   return (
-    <Card className="p-6">
-      <Form {...form}>
-        <form
-          className="font-work-sans flex flex-col gap-6"
-          onSubmit={form.handleSubmit(handleSubmit)}
-        >
-          <div className="w-full flex flex-col gap-6 sm:flex-row sm:gap-3">
-            <div className="flex gap-3">
-              <FormField
-                control={form.control}
-                name="amount"
-                render={({ field }) => (
-                  <FormItem className="w-24">
-                    <FormLabel htmlFor="amount">Amount</FormLabel>
-                    <FormControl>
-                      <div className="relative flex">
-                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 z-20">
-                          <span className="text-gray-500 sm:text-sm">$</span>
-                        </div>
-                        <Input
-                          {...field}
-                          id="amount"
-                          autoComplete="off"
-                          className="pl-7"
-                          placeholder="0.00"
-                        />
+    <Form {...form}>
+      <form
+        className="font-work-sans flex flex-col gap-6"
+        onSubmit={form.handleSubmit(handleSubmit)}
+      >
+        <div className="w-full flex flex-col gap-6 sm:flex-row sm:gap-3">
+          <div className="flex gap-3">
+            <FormField
+              control={form.control}
+              name="amount"
+              render={({ field }) => (
+                <FormItem className="w-24">
+                  <FormLabel htmlFor="amount">Amount</FormLabel>
+                  <FormControl>
+                    <div className="relative flex">
+                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 z-20">
+                        <span className="text-gray-500 sm:text-sm">$</span>
                       </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="flex-1">
-                <FormField
-                  control={form.control}
-                  name="contributor"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor="contributor">Contributor</FormLabel>
-                      <FormControl>
-                        <AutocompleteInput
-                          {...field}
-                          id="contributor"
-                          options={contributors}
-                          placeholder="Enter name"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
+                      <Input
+                        {...field}
+                        id="amount"
+                        autoComplete="off"
+                        className="pl-7"
+                        placeholder="0.00"
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <div className="flex-1">
               <FormField
                 control={form.control}
-                name="description"
+                name="contributor"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel htmlFor="description">
-                      Description (optional)
-                    </FormLabel>
+                    <FormLabel htmlFor="contributor">Contributor</FormLabel>
                     <FormControl>
-                      <Input
+                      <AutocompleteInput
                         {...field}
-                        id="description"
-                        autoComplete="off"
-                        className="w-full"
-                        placeholder="Describe contribution"
+                        id="contributor"
+                        options={contributors}
+                        placeholder="Enter name"
                       />
                     </FormControl>
                     <FormMessage />
@@ -150,34 +124,53 @@ export function NewContribution({
               />
             </div>
           </div>
-
-          {showPreview ? (
-            <div>
-              <FormLabel>Preview</FormLabel>
-              <ContributionPreview
-                contribution={{
-                  amount,
-                  contributor,
-                  description: description ?? '',
-                }}
-              />
-            </div>
-          ) : null}
-
-          <div className="flex flex-row-reverse items-center justify-start gap-3">
-            <Button type="submit" variant="default">
-              Add contribution
-            </Button>
-            <Button
-              type="reset"
-              variant="secondary"
-              onClick={() => form.reset()}
-            >
-              Cancel
-            </Button>
+          <div className="flex-1">
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="description">
+                    Description (optional)
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      id="description"
+                      autoComplete="off"
+                      className="w-full"
+                      placeholder="Describe contribution"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
-        </form>
-      </Form>
-    </Card>
+        </div>
+
+        {showPreview ? (
+          <div className="space-y-2">
+            <FormLabel>Preview</FormLabel>
+            <ContributionPreview
+              contribution={{
+                amount,
+                contributor,
+                description: description ?? '',
+              }}
+            />
+          </div>
+        ) : null}
+
+        <div className="flex flex-row-reverse items-center justify-start gap-3">
+          <Button type="submit" variant="default">
+            Add contribution
+          </Button>
+          <Button type="reset" variant="secondary" onClick={() => form.reset()}>
+            Cancel
+          </Button>
+        </div>
+      </form>
+    </Form>
   )
 }

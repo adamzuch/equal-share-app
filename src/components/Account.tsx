@@ -1,3 +1,8 @@
+import { ArrowDownLeft, ArrowUpRight, Minus } from 'lucide-react'
+
+import { Card } from '@/components/ui/card'
+
+import { cn } from '@/lib/utils'
 import { ContributorAvatar } from '@/components/ContributorAvatar'
 
 export function Account({
@@ -12,14 +17,20 @@ export function Account({
   rank: number
 }) {
   let AccountDescription = CreditorDescription
+  let AccountIcon = ArrowDownLeft
+  let accountIconClassName = 'text-green-500'
   if (balance === 0) {
     AccountDescription = BalancedDescription
+    AccountIcon = Minus
+    accountIconClassName = ''
   } else if (balance < 0) {
     AccountDescription = DebtorDescription
+    AccountIcon = ArrowUpRight
+    accountIconClassName = 'text-red-500'
   }
 
   return (
-    <div className="p-3 flex items-center">
+    <Card className="p-3 flex items-center">
       <div className="flex flex-row justify-between items-center gap-3 w-full">
         <div className="text-sm text-muted-foreground">#{rank}</div>
         <ContributorAvatar contributor={contributor} />
@@ -30,8 +41,10 @@ export function Account({
             total={total}
           />
         </div>
+
+        <AccountIcon className={cn('mx-3', accountIconClassName)} />
       </div>
-    </div>
+    </Card>
   )
 }
 
@@ -51,7 +64,7 @@ const CreditorDescription = ({
       <span className="font-semibold text-green-500">
         ${balance.toFixed(2)}
       </span>{' '}
-      to decrease their contribution
+      to match the equal share
     </>
   )
 }
@@ -66,7 +79,7 @@ const BalancedDescription = ({
   return (
     <>
       {contributor} paid <span className="font-semibold">${total}</span> which
-      already matches the equal share contribution
+      already matches the equal share
     </>
   )
 }
@@ -87,7 +100,7 @@ const DebtorDescription = ({
       <span className="font-semibold text-destructive">
         ${Math.abs(balance).toFixed(2)}
       </span>{' '}
-      to increase their contribution
+      to match the equal share
     </>
   )
 }

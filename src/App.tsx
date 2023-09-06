@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { Separator } from '@/components/ui/separator'
+
 import { ContributionType, calculateSummary } from '@/lib/calculate-summary'
 import { NewContribution } from '@/components/forms/NewContribution'
 import { Summary } from '@/components/Summary'
@@ -57,8 +59,7 @@ const TEST_CONTRIBUTIONS: ContributionType[] = [
 ]
 
 function App() {
-  const [contributions, setContributions] =
-    useState<ContributionType[]>(TEST_CONTRIBUTIONS)
+  const [contributions, setContributions] = useState<ContributionType[]>([])
   const contributors = [
     ...new Set(contributions.map((c) => c.contributor).filter((c) => c !== '')),
   ]
@@ -81,32 +82,37 @@ function App() {
   }
 
   return (
-    <div className="font-work-sans flex flex-col items-center py-12 space-y-12 overflow-x-hidden">
-      <div className="space-y-12 px-6 w-full md:w-[768px]">
-        <Header />
+    <div className="flex flex-col items-center font-work-sans">
+      <div className="w-full md:w-[768px] px-6 py-12 space-y-12">
+        <div className="space-y-12">
+          <Header />
 
-        <div className="flex flex-col gap-3">
-          <div className="w-full">
-            <NewContribution
-              contributors={contributors}
-              onSubmit={addContribution}
-            />
+          <div className="flex flex-col gap-12">
+            <div className="w-full">
+              <NewContribution
+                contributors={contributors}
+                onSubmit={addContribution}
+              />
+            </div>
+
+            {contributions.length > 0 ? (
+              <Contributions
+                contributions={contributions}
+                contributors={contributors}
+                updateContribution={updateContribution}
+                deleteContribution={deleteContribution}
+              />
+            ) : null}
           </div>
-
-          {contributions.length > 0 ? (
-            <Contributions
-              contributions={contributions}
-              contributors={contributors}
-              updateContribution={updateContribution}
-              deleteContribution={deleteContribution}
-            />
-          ) : null}
         </div>
-      </div>
 
-      {summary !== null ? (
-        <Summary contributors={contributors} {...summary} />
-      ) : null}
+        {summary !== null ? (
+          <>
+            <Separator />
+            <Summary contributors={contributors} {...summary} />
+          </>
+        ) : null}
+      </div>
     </div>
   )
 }

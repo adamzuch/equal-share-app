@@ -150,7 +150,7 @@ export function EditContribution({
         </div>
 
         {showPreview ? (
-          <div>
+          <div className="space-y-2">
             <FormLabel>Preview</FormLabel>
             <ContributionPreview
               contribution={{
