@@ -1,9 +1,12 @@
-import { cn } from '@/lib/utils'
-import { Account, Repayment } from '../lib/equalize'
+import { ArrowLeftRight, Smile, Users2 } from 'lucide-react'
 
-import { CreditorCard } from './CreditorCard'
-import { DebtorCard } from './DebtorCard'
-import { RepaymentCard } from './RepaymentCard'
+import { cn } from '@/lib/utils'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Separator } from '@/components/ui/separator'
+
+import type { AccountType, RepaymentType } from '@/lib/calculate-summary'
+import { Repayment } from '@/components/Repayment'
+import { Account } from '@/components/Account'
 
 export function Summary({
   accounts,
@@ -12,76 +15,66 @@ export function Summary({
   target,
   total,
 }: {
-  accounts: Account[]
+  accounts: AccountType[]
   contributors: string[]
-  repayments: Repayment[]
+  repayments: RepaymentType[]
   target: number
   total: number
 }) {
-  const creditorAccounts = accounts
-    .filter(({ balance }) => balance > 0)
+  const rankedAccounts = (accounts = accounts
     .sort((a, b) => b.balance - a.balance)
-
-  const debtorAccounts = accounts
-    .filter(({ balance }) => balance < 0)
-    .sort((a, b) => b.balance - a.balance)
+    .map((account) => ({
+      ...account,
+      rank: accounts.findIndex((a) => a.balance === account.balance) + 1,
+    })))
 
   return (
-    <div className="space-y-24">
-      <div className="space-y-12">
-        <h2 className="text-2xl text-center">
-          <span className="font-semibold">${total}</span> paid by{' '}
-          <span className="font-semibold">{contributors.length} people</span>{' '}
-          results in an equal share of{' '}
-          <span className="font-semibold">${target.toFixed(2)}</span>
-        </h2>
-        {creditorAccounts.length > 0 ? (
-          <div className="space-y-1.5">
-            <h2 className="text-xl font-bold tracking-wide">Creditors</h2>
-            <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
-              {creditorAccounts.map((account) => (
-                <CreditorCard
-                  key={account.contributor}
-                  creditor={account.contributor}
-                  balance={account.balance}
-                  total={account.total}
-                />
-              ))}
-            </div>
-          </div>
-        ) : null}
-        {debtorAccounts.length > 0 ? (
-          <div className="space-y-1.5">
-            <h2 className="text-xl font-bold tracking-wide">Debtors</h2>
-            <div className="grid grid-cols-1 auto-rows-[1fr] gap-3">
-              {debtorAccounts.map((account) => (
-                <DebtorCard
-                  key={account.contributor}
-                  debtor={account.contributor}
-                  balance={account.balance}
-                  total={account.total}
-                />
-              ))}
-            </div>
-          </div>
-        ) : null}
+    <div className="flex flex-col items-center space-y-12">
+      <div className="text-2xl text-center ">
+        <span className="font-semibold">${total}</span> paid by{' '}
+        <span className="font-semibold">{contributors.length} people</span>{' '}
+        results in an equal share of{' '}
+        <span className="font-semibold">${target.toFixed(2)}</span>
+      </div>
+      <Separator />
+
+      <div className="space-y-3 w-full">
+        <span className="font-montserrat tracking-wide text-xl font-bold flex items-center gap-2">
+          <Users2 />
+          Contributors
+        </span>
+        <div className="grid grid-cols-1 gap-3 auto-rows-[1fr]">
+          {rankedAccounts.map((account) => (
+            <Account key={account.contributor} {...account} />
+          ))}
+        </div>
       </div>
 
-      {repayments.length > 0 ? (
-        <div className="space-y-1.5">
-          <h2 className="text-xl font-bold tracking-wide">Settle debts</h2>
+      <div className="w-full space-y-3">
+        <span className="font-montserrat tracking-wide text-xl font-bold flex items-center gap-2">
+          <ArrowLeftRight />
+          Settle debts
+        </span>
+        {repayments.length > 0 ? (
           <div
             className={cn(
-              'grid grid-cols-1 auto-rows-[1fr] gap-3',
-              repayments.length > 1 ? 'md:grid-cols-2' : ''
+              'grid grid-cols-1 lg:grid-cols-2 auto-rows-[1fr] gap-3'
             )}
           >
             {repayments.map((repayment, i) => (
-              <RepaymentCard key={i} repayment={repayment} />
+              <Repayment key={i} repayment={repayment} />
             ))}
           </div>
-        </div>
-      ) : null}
+        ) : (
+          <Alert>
+            <Smile className="h-4 w-4" />
+            <AlertTitle>No debts to settle</AlertTitle>
+            <AlertDescription>
+              Contributions are already balanced
+            </AlertDescription>
+          </Alert>
+        )}
+      </div>
     </div>
   )
 }

@@ -1,23 +1,23 @@
-export type Contribution = {
+export type ContributionType = {
   amount: number | null
   contributor: string
   description: string
 }
 
-export type Account = {
+export type AccountType = {
   contributor: string
   balance: number
   total: number
 }
 
-export type Repayment = {
+export type RepaymentType = {
   creditor: string
   debtor: string
   amount: number
 }
 
-export function equalize(
-  contributions: Contribution[],
+export function calculateSummary(
+  contributions: ContributionType[],
   contributors: string[]
 ) {
   if (contributors.length < 2) return null
@@ -32,10 +32,10 @@ export function equalize(
 }
 
 function calculateAccounts(
-  contributions: Contribution[],
+  contributions: ContributionType[],
   target: number
-): Account[] {
-  const accounts = new Map<string, Account>()
+): AccountType[] {
+  const accounts = new Map<string, AccountType>()
   for (const { contributor, amount } of contributions) {
     if (accounts.has(contributor)) {
       const account = accounts.get(contributor)!
@@ -52,8 +52,8 @@ function calculateAccounts(
   return Array.from(accounts.values())
 }
 
-function calculateRepayments(accounts: Account[]): Repayment[] {
-  const repayments: Repayment[] = []
+function calculateRepayments(accounts: AccountType[]): RepaymentType[] {
+  const repayments: RepaymentType[] = []
 
   let balances = [
     ...accounts.map(({ contributor, balance }) => [contributor, balance]),

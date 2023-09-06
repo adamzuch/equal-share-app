@@ -17,8 +17,8 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        atkinson: ['Atkinson Hyperlegible', 'sans-serif'],
         'work-sans': ['Work Sans', 'sans-serif'],
+        montserrat: ['Montserrat', 'sans-serif'],
       },
       colors: {
         border: 'hsl(var(--border))',

@@ -1,7 +1,9 @@
-import * as z from 'zod'
 import { DefaultValues, useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { Input } from '@/components/ui/input'
+import { AutocompleteInput } from '@/components/ui/autocomplete'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -9,55 +11,37 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from './ui/form'
-import { Input } from './ui/input'
+} from '@/components/ui/form'
 
-import { type Contribution } from '../lib/equalize'
+import type { ContributionType } from '@/lib/calculate-summary'
+import { ContributionPreview } from '@/components/ContributionPreview'
 
-import { AutocompleteInput } from './ui/autocomplete'
-import { Button } from './ui/button'
-import { ContributionCardPreview } from './ContributionCardPreview'
+import type { ContributionForm } from './contribution-schema'
+import { contributionSchema } from './contribution-schema'
 
-const formSchema = z.object({
-  amount: z
-    .string()
-    .nonempty('Cannot be empty')
-    .pipe(
-      z.coerce
-        .number({
-          invalid_type_error: 'Must be a number',
-        })
-        .nonnegative('Amount cannot be negative')
-    ),
-  contributor: z.string().nonempty('Cannot be empty'),
-  description: z.string().optional(),
-})
-
-type FormType = z.infer<typeof formSchema>
-
-export function EditContributionForm({
+export function EditContribution({
   contribution,
   contributors,
   onSubmit,
   onCancel,
 }: {
-  contribution: Contribution
+  contribution: ContributionType
   contributors: string[]
-  onSubmit?: (contribution: Contribution) => void
+  onSubmit?: (contribution: ContributionType) => void
   onCancel?: () => void
 }) {
-  const formDefaultValues: DefaultValues<FormType> = {
+  const formDefaultValues: DefaultValues<ContributionForm> = {
     amount: String(contribution.amount) as never,
     contributor: contribution.contributor,
     description: contribution.description,
   }
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<ContributionForm>({
+    resolver: zodResolver(contributionSchema),
     defaultValues: formDefaultValues,
   })
 
-  function handleSubmit(data: z.infer<typeof formSchema>) {
+  function handleSubmit(data: ContributionForm) {
     const amount = data.amount
     const contributor = data.contributor
     const description = data.description ?? ''
@@ -89,8 +73,11 @@ export function EditContributionForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <div className="flex flex-col gap-3 w-full">
+      <form
+        className="font-work-sans flex flex-col gap-6"
+        onSubmit={form.handleSubmit(handleSubmit)}
+      >
+        <div className="flex flex-col gap-6">
           <div className="flex gap-3">
             <FormField
               control={form.control}
@@ -163,8 +150,9 @@ export function EditContributionForm({
         </div>
 
         {showPreview ? (
-          <div className="mt-6">
-            <ContributionCardPreview
+          <div className="space-y-2">
+            <FormLabel>Preview</FormLabel>
+            <ContributionPreview
               contribution={{
                 amount,
                 contributor,
@@ -174,7 +162,7 @@ export function EditContributionForm({
           </div>
         ) : null}
 
-        <div className="mt-6 flex flex-row-reverse items-center justify-start gap-3">
+        <div className="flex flex-row-reverse items-center justify-start gap-3">
           <Button type="submit" variant="default">
             Save changes
           </Button>
