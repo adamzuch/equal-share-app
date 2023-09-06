@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card'
 
 import { cn } from '@/lib/utils'
 import { ContributorAvatar } from '@/components/ContributorAvatar'
+import type { Currency } from '@/lib/calculate-summary'
 
 export function Account({
   contributor,
@@ -12,18 +13,18 @@ export function Account({
   rank,
 }: {
   contributor: string
-  balance: number
-  total: number
+  balance: Currency
+  total: Currency
   rank: number
 }) {
   let AccountDescription = CreditorDescription
   let AccountIcon = ArrowDownLeft
   let accountIconClassName = 'text-green-500'
-  if (balance === 0) {
+  if (balance.value === 0) {
     AccountDescription = BalancedDescription
     AccountIcon = Minus
     accountIconClassName = ''
-  } else if (balance < 0) {
+  } else if (balance.value < 0) {
     AccountDescription = DebtorDescription
     AccountIcon = ArrowUpRight
     accountIconClassName = 'text-red-500'
@@ -54,16 +55,14 @@ const CreditorDescription = ({
   total,
 }: {
   contributor: string
-  balance: number
-  total: number
+  balance: Currency
+  total: Currency
 }) => {
   return (
     <>
-      {contributor} paid <span className="font-semibold">${total}</span> and
-      must receive{' '}
-      <span className="font-semibold text-green-500">
-        ${balance.toFixed(2)}
-      </span>{' '}
+      {contributor} paid <span className="font-semibold">{total.format()}</span>{' '}
+      and must receive{' '}
+      <span className="font-semibold text-green-500">{balance.format()}</span>{' '}
       to match the equal share
     </>
   )
@@ -74,12 +73,12 @@ const BalancedDescription = ({
   total,
 }: {
   contributor: string
-  total: number
+  total: Currency
 }) => {
   return (
     <>
-      {contributor} paid <span className="font-semibold">${total}</span> which
-      already matches the equal share
+      {contributor} paid <span className="font-semibold">{total.format()}</span>{' '}
+      which already matches the equal share
     </>
   )
 }
@@ -90,15 +89,15 @@ const DebtorDescription = ({
   total,
 }: {
   contributor: string
-  balance: number
-  total: number
+  balance: Currency
+  total: Currency
 }) => {
   return (
     <>
-      {contributor} paid <span className="font-semibold">${total}</span> and
-      must pay a further{' '}
+      {contributor} paid <span className="font-semibold">{total.format()}</span>{' '}
+      and must pay a further{' '}
       <span className="font-semibold text-destructive">
-        ${Math.abs(balance).toFixed(2)}
+        {balance.format({ negativePattern: '$#' })}
       </span>{' '}
       to match the equal share
     </>

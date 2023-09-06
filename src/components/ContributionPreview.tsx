@@ -14,7 +14,7 @@ export function ContributionPreview({
     <Card className="p-3 flex items-center gap-3">
       <ContributorAvatar contributor={contributor} />
       <div className=" truncate">
-        {contributor} paid <span className="font-semibold">${amount}</span>
+        {contributor} paid <span className="font-semibold">{amount}</span>
         {description ? (
           <span>
             {' '}

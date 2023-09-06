@@ -16,7 +16,7 @@ export function Repayment({ repayment }: { repayment: RepaymentType }) {
       </div>
 
       <div className="flex w-full justify-center items-center gap-1.5">
-        <div className="font-semibold">${amount.toFixed(2)}</div>
+        <div className="font-semibold">{amount.format()}</div>
         <ArrowRight />
       </div>
 
