@@ -60,11 +60,7 @@ export function Summary({
           Settle debts
         </span>
         {repayments.length > 0 ? (
-          <div
-            className={cn(
-              'grid grid-cols-1 lg:grid-cols-2 auto-rows-[1fr] gap-3'
-            )}
-          >
+          <div className={cn('grid grid-cols-1 auto-rows-[1fr] gap-3')}>
             {repayments.map((repayment, i) => (
               <Repayment key={i} repayment={repayment} />
             ))}
@@ -74,7 +70,7 @@ export function Summary({
             <Smile className="h-4 w-4" />
             <AlertTitle>No debts to settle</AlertTitle>
             <AlertDescription>
-              Contributions are already balanced
+              Contributions are already balanced (as best as they can be)
             </AlertDescription>
           </Alert>
         )}
