@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
+import currency from 'currency.js'
 
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -35,7 +36,8 @@ export function Contribution({
       <div className="flex-1 min-w-0 flex items-center gap-3">
         <ContributorAvatar contributor={contributor} />
         <div className="flex-1 min-w-0 truncate">
-          {contributor} paid <span className="font-semibold">{amount}</span>
+          {contributor} paid{' '}
+          <span className="font-semibold">{currency(amount).format()}</span>
           {description ? (
             <span>
               {' '}

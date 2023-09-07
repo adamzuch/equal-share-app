@@ -1,4 +1,4 @@
-import { Receipt } from 'lucide-react'
+import { Coins } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
@@ -19,7 +19,7 @@ export function Contributions({
   return (
     <div className="space-y-3 w-full">
       <span className="font-montserrat tracking-wide text-xl font-bold flex items-center gap-2">
-        <Receipt />
+        <Coins />
         Contributions
       </span>
 

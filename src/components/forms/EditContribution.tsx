@@ -156,7 +156,7 @@ export function EditContribution({
             <FormLabel>Preview</FormLabel>
             <ContributionPreview
               contribution={{
-                amount: amount !== null ? currency(amount).value : null,
+                amount: currency(amount).value,
                 contributor,
                 description: description ?? '',
               }}

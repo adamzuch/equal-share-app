@@ -3,7 +3,7 @@ import currency from 'currency.js'
 export type Currency = ReturnType<typeof currency>
 
 export type ContributionType = {
-  amount: number | null
+  amount: number
   contributor: string
   description: string
 }
@@ -34,13 +34,10 @@ export function calculateSummary(
 
   const contributions = initialContributions.map((contribution) => ({
     ...contribution,
-    amount: currency(contribution.amount ?? 0),
+    amount: currency(contribution.amount),
   }))
 
-  const total = contributions.reduce(
-    (a, b) => a.add(b.amount ?? 0),
-    currency(0)
-  )
+  const total = contributions.reduce((a, b) => a.add(b.amount), currency(0))
   const target = total.divide(contributors.length)
 
   const accounts = calculateAccounts(contributions, target)
@@ -57,13 +54,13 @@ function calculateAccounts(
   for (const { contributor, amount } of contributions) {
     if (accounts.has(contributor)) {
       const account = accounts.get(contributor)!
-      account.total = account.total.add(amount ?? currency(0))
-      account.balance = account.balance.add(amount ?? currency(0))
+      account.total = account.total.add(amount)
+      account.balance = account.balance.add(amount)
     } else {
       accounts.set(contributor, {
         contributor,
-        total: amount ?? currency(0),
-        balance: (amount ?? currency(0)).subtract(target),
+        total: amount,
+        balance: amount.subtract(target),
       })
     }
   }
