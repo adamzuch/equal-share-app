@@ -6,9 +6,7 @@ export const contributionSchema = z.object({
     .nonempty('Cannot be empty')
     .pipe(
       z.coerce
-        .number({
-          invalid_type_error: 'Must be a number',
-        })
+        .number({ invalid_type_error: 'Must be a number' })
         .nonnegative('Amount cannot be negative')
     ),
   contributor: z.string().nonempty('Cannot be empty'),

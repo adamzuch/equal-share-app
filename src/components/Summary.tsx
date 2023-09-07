@@ -4,7 +4,11 @@ import { cn } from '@/lib/utils'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Separator } from '@/components/ui/separator'
 
-import type { AccountType, RepaymentType } from '@/lib/calculate-summary'
+import type {
+  AccountType,
+  Currency,
+  RepaymentType,
+} from '@/lib/calculate-summary'
 import { Repayment } from '@/components/Repayment'
 import { Account } from '@/components/Account'
 
@@ -18,11 +22,11 @@ export function Summary({
   accounts: AccountType[]
   contributors: string[]
   repayments: RepaymentType[]
-  target: number
-  total: number
+  target: Currency
+  total: Currency
 }) {
   const rankedAccounts = (accounts = accounts
-    .sort((a, b) => b.balance - a.balance)
+    .sort((a, b) => b.balance.value - a.balance.value)
     .map((account) => ({
       ...account,
       rank: accounts.findIndex((a) => a.balance === account.balance) + 1,
@@ -31,10 +35,10 @@ export function Summary({
   return (
     <div className="flex flex-col items-center space-y-12">
       <div className="text-2xl text-center ">
-        <span className="font-semibold">${total}</span> paid by{' '}
+        <span className="font-semibold">{total.format()}</span> paid by{' '}
         <span className="font-semibold">{contributors.length} people</span>{' '}
         results in an equal share of{' '}
-        <span className="font-semibold">${target.toFixed(2)}</span>
+        <span className="font-semibold">{target.format()}</span>
       </div>
       <Separator />
 
@@ -56,11 +60,7 @@ export function Summary({
           Settle debts
         </span>
         {repayments.length > 0 ? (
-          <div
-            className={cn(
-              'grid grid-cols-1 lg:grid-cols-2 auto-rows-[1fr] gap-3'
-            )}
-          >
+          <div className={cn('grid grid-cols-1 auto-rows-[1fr] gap-3')}>
             {repayments.map((repayment, i) => (
               <Repayment key={i} repayment={repayment} />
             ))}
@@ -70,7 +70,7 @@ export function Summary({
             <Smile className="h-4 w-4" />
             <AlertTitle>No debts to settle</AlertTitle>
             <AlertDescription>
-              Contributions are already balanced
+              Contributions are already balanced (as best as they can be)
             </AlertDescription>
           </Alert>
         )}

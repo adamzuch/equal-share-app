@@ -1,3 +1,5 @@
+import currency from 'currency.js'
+
 import { Card } from '@/components/ui/card'
 
 import { ContributionType } from '@/lib/calculate-summary'
@@ -14,7 +16,8 @@ export function ContributionPreview({
     <Card className="p-3 flex items-center gap-3">
       <ContributorAvatar contributor={contributor} />
       <div className=" truncate">
-        {contributor} paid <span className="font-semibold">${amount}</span>
+        {contributor} paid{' '}
+        <span className="font-semibold">{currency(amount).format()}</span>
         {description ? (
           <span>
             {' '}
