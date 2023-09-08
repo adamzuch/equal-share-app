@@ -5,9 +5,7 @@ export function Header() {
         equal share
       </h1>
       <p className="text-sm">
-        Effortlessly split group expenses and instantly settle debts. Share
-        using a 24-hour link, with no data collected permanently and no need for
-        sign-up.
+        Effortlessly split group expenses and instantly settle debts.
       </p>
     </div>
   )

@@ -8,63 +8,10 @@ import { Summary } from '@/components/Summary'
 import { Contributions } from '@/components/Contributions'
 import { Header } from '@/components/Header'
 
-const INITIAL_CONTRIBUTIONS: ContributionType[] = [
-  { amount: 23, contributor: 'Adam', description: '' },
-  { amount: 7, contributor: 'Bill', description: 'Bus fare' },
-  { amount: 5, contributor: 'John', description: 'Shared lunch' },
-  {
-    amount: 52,
-    contributor: 'John',
-    description: 'Accomodation for London',
-  },
-  { amount: 15, contributor: 'Frank', description: '' },
-]
-
-// const TEST_CONTRIBUTIONS: ContributionType[] = [
-//   {
-//     amount: 1,
-//     contributor: 'Adam',
-//     description: '',
-//   },
-//   {
-//     amount: 3,
-//     contributor: 'Assa',
-//     description: '',
-//   },
-//   {
-//     amount: 12,
-//     contributor: 'aaron',
-//     description: '',
-//   },
-//   {
-//     amount: 23,
-//     contributor: 'Adam',
-//     description: '',
-//   },
-//   {
-//     amount: 7,
-//     contributor: 'Bill',
-//     description: 'Bus fare',
-//   },
-//   {
-//     amount: 5,
-//     contributor: 'John',
-//     description: 'Shared lunch',
-//   },
-//   {
-//     amount: 15,
-//     contributor: 'Frank',
-//     description: '',
-//   },
-// ]
-
 function App() {
-  const [contributions, setContributions] = useState<ContributionType[]>(
-    INITIAL_CONTRIBUTIONS
-  )
-  const contributors = [
-    ...new Set(contributions.map((c) => c.contributor).filter((c) => c !== '')),
-  ]
+  const [contributions, setContributions] = useState<ContributionType[]>([])
+  const contributors = [...new Set(contributions.map((c) => c.contributor))]
+
   const summary = calculateSummary(contributions, contributors)
 
   const updateContribution = (i: number, contribution: ContributionType) => {
