@@ -153,7 +153,7 @@ export function NewContribution({
 
         {showPreview ? (
           <div className="space-y-2">
-            <FormLabel>Preview</FormLabel>
+            <div className="text-sm font-medium leading-none">Preview</div>
             <ContributionPreview
               contribution={{
                 amount: currency(amount).value,
