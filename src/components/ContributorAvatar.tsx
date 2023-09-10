@@ -6,7 +6,10 @@ export function ContributorAvatar({ contributor }: { contributor: string }) {
   const iconColor = getAvatarColor(contributor)
   return (
     <Avatar>
-      <AvatarFallback style={{ backgroundColor: iconColor }}>
+      <AvatarFallback
+        className="text-[#020817] transition-colors"
+        style={{ backgroundColor: iconColor }}
+      >
         <Icon />
       </AvatarFallback>
     </Avatar>

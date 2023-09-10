@@ -4,6 +4,7 @@ import { Separator } from '@/components/ui/separator'
 
 import { ContributionType, calculateSummary } from '@/lib/calculate-summary'
 import { NewContribution } from '@/components/forms/NewContribution'
+import { ThemeProvider } from '@/components/ThemeProvider'
 import { Summary } from '@/components/Summary'
 import { Contributions } from '@/components/Contributions'
 import { Header } from '@/components/Header'
@@ -31,38 +32,40 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col items-center font-work-sans">
-      <div className="w-full md:w-[768px] px-6 py-12 space-y-12">
-        <div className="space-y-12">
-          <Header />
+    <ThemeProvider defaultTheme="system">
+      <div className="flex flex-col items-center font-work-sans">
+        <div className="w-full md:w-[768px] px-6 py-12 space-y-12">
+          <div className="space-y-12">
+            <Header />
 
-          <div className="flex flex-col gap-12">
-            <div className="w-full">
-              <NewContribution
-                contributors={contributors}
-                onSubmit={addContribution}
-              />
+            <div className="flex flex-col gap-12">
+              <div className="w-full">
+                <NewContribution
+                  contributors={contributors}
+                  onSubmit={addContribution}
+                />
+              </div>
+
+              {contributions.length > 0 ? (
+                <Contributions
+                  contributions={contributions}
+                  contributors={contributors}
+                  updateContribution={updateContribution}
+                  deleteContribution={deleteContribution}
+                />
+              ) : null}
             </div>
-
-            {contributions.length > 0 ? (
-              <Contributions
-                contributions={contributions}
-                contributors={contributors}
-                updateContribution={updateContribution}
-                deleteContribution={deleteContribution}
-              />
-            ) : null}
           </div>
-        </div>
 
-        {summary !== null ? (
-          <>
-            <Separator />
-            <Summary contributors={contributors} {...summary} />
-          </>
-        ) : null}
+          {summary !== null ? (
+            <>
+              <Separator />
+              <Summary contributors={contributors} {...summary} />
+            </>
+          ) : null}
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   )
 }
 
