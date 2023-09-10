@@ -27,7 +27,7 @@ export function Account({
   } else if (balance.value < 0) {
     AccountDescription = DebtorDescription
     AccountIcon = ArrowUpRight
-    accountIconClassName = 'text-red-500'
+    accountIconClassName = 'text-destructive'
   }
 
   return (
