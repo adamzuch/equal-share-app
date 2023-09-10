@@ -7,6 +7,7 @@ import { NewContribution } from '@/components/forms/NewContribution'
 import { Summary } from '@/components/Summary'
 import { Contributions } from '@/components/Contributions'
 import { Header } from '@/components/Header'
+import { Button } from './components/ui/button'
 
 function App() {
   const [contributions, setContributions] = useState<ContributionType[]>([])
@@ -59,11 +60,29 @@ function App() {
           <>
             <Separator />
             <Summary contributors={contributors} {...summary} />
+            <Button
+              onClick={() => {
+                share(contributions)
+              }}
+            >
+              Share
+            </Button>
           </>
         ) : null}
       </div>
     </div>
   )
+}
+
+async function share(contributions: ContributionType[]) {
+  return await fetch('/share', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(contributions),
+  })
 }
 
 export default App
