@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { nanoid } from 'nanoid'
 
 import { Separator } from '@/components/ui/separator'
 
@@ -63,8 +64,10 @@ function App() {
               <Separator />
               <Summary contributors={contributors} {...summary} />
               <Button
-                onClick={() => {
-                  share(contributions)
+                onClick={async () => {
+                  const response = await share(contributions)
+                  const responseJSON = await response.json()
+                  console.log(responseJSON)
                 }}
               >
                 Share
@@ -84,7 +87,10 @@ async function share(contributions: ContributionType[]) {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(contributions),
+    body: JSON.stringify({
+      id: nanoid(),
+      contributions,
+    }),
   })
 }
 

@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "npx wrangler pages dev --compatibility-date=2023-09-04 --proxy=5173 -- vite",
+    "dev": "npx wrangler pages dev --compatibility-date=2023-09-04 --proxy=5173 --kv=EQUAL_SHARE_KV -- vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
@@ -22,6 +22,7 @@
     "clsx": "^2.0.0",
     "currency.js": "^2.0.4",
     "lucide-react": "^0.268.0",
+    "nanoid": "^4.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.45.4",
