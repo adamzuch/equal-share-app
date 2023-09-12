@@ -1,5 +1,3 @@
-import { ThemeToggle } from './ThemeToggle'
-
 export function Header() {
   return (
     <div className="space-y-2">
@@ -7,7 +5,6 @@ export function Header() {
         <h1 className="text-3xl font-bold font-montserrat tracking-wide">
           equal share
         </h1>
-        <ThemeToggle />
       </div>
       <p className="text-sm">
         Effortlessly split group expenses and instantly settle debts.
