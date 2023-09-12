@@ -14,7 +14,7 @@ type ShareRequest = {
 }
 
 type ShareResponse = {
-  link: string
+  id: string
 }
 
 export const onRequestPost: PagesFunction<Env> = async (context) => {
@@ -39,9 +39,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       console.log(key, value)
     }
 
-    const response: ShareResponse = {
-      link: `https://equal-share-app.pages.dev/${id}`,
-    }
+    const response: ShareResponse = { id }
 
     return new Response(JSON.stringify(response), { status: 201 })
   } catch (err) {

@@ -9,12 +9,20 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import { Summary } from '@/components/Summary'
 import { Contributions } from '@/components/Contributions'
 import { Header } from '@/components/Header'
-import { Button } from './components/ui/button'
+import { Button, buttonVariants } from './components/ui/button'
+
+const INIT_CONRIBUTIONS: ContributionType[] = [
+  { contributor: 'Alice', amount: 100, description: '' },
+  { contributor: 'Bob', amount: 50, description: '' },
+]
 
 function App() {
-  const [contributions, setContributions] = useState<ContributionType[]>([])
-  const contributors = [...new Set(contributions.map((c) => c.contributor))]
+  const [shareId, setShareId] = useState<string>()
 
+  const [contributions, setContributions] =
+    useState<ContributionType[]>(INIT_CONRIBUTIONS)
+
+  const contributors = [...new Set(contributions.map((c) => c.contributor))]
   const summary = calculateSummary(contributions, contributors)
 
   const updateContribution = (i: number, contribution: ContributionType) => {
@@ -63,21 +71,42 @@ function App() {
             <>
               <Separator />
               <Summary contributors={contributors} {...summary} />
-              <Button
-                onClick={async () => {
-                  const response = await share(contributions)
-                  const responseJSON = await response.json()
-                  console.log(responseJSON)
-                }}
-              >
-                Share
-              </Button>
+              {shareId === undefined ? (
+                <Button
+                  disabled={shareId !== undefined}
+                  onClick={async () => {
+                    const res = await (await share(contributions))?.json()
+
+                    if (res?.id && typeof res.id === 'string') {
+                      setShareId(res.id)
+                    }
+                  }}
+                >
+                  Share!
+                </Button>
+              ) : (
+                <div>
+                  Link to share:{' '}
+                  <a
+                    className={buttonVariants({ variant: 'link' })}
+                    target="blank"
+                    href={getShareLink(shareId)}
+                  >
+                    {getShareLink(shareId)}
+                  </a>
+                </div>
+              )}
             </>
           ) : null}
         </div>
       </div>
     </ThemeProvider>
   )
+}
+
+function getShareLink(id: string) {
+  const { protocol, hostname, port } = window.location
+  return `${protocol}//${hostname}${port ? `:${port}` : ''}/${id}`
 }
 
 async function share(contributions: ContributionType[]) {
