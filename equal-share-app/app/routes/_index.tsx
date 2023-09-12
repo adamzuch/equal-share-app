@@ -4,6 +4,7 @@ import {
   type V2_MetaFunction,
 } from '@remix-run/cloudflare'
 import { useLoaderData } from '@remix-run/react'
+import { Header } from '~/components/Header'
 
 export const meta: V2_MetaFunction = () => {
   return [
@@ -32,6 +33,7 @@ export default function Index() {
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.8' }}>
       <h1 className="text-2xl font-thin text-red-500">Welcome to Remix</h1>
+      <Header />
       <ul>
         <li>
           <a
