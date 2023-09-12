@@ -71,7 +71,14 @@ function App() {
             <Separator />
             <Summary contributors={contributors} {...summary} />
             {shareId === undefined ? (
-              <Button disabled={shareId !== undefined} onClick={async () => {}}>
+              <Button
+                disabled={shareId !== undefined}
+                onClick={async () => {
+                  const response = await share(contributions)
+                  const { id } = (await response.json()) as any
+                  setShareId(id)
+                }}
+              >
                 Share!
               </Button>
             ) : (
@@ -99,7 +106,7 @@ function getShareLink(id: string) {
 }
 
 async function share(contributions: ContributionType[]) {
-  return await fetch('/share', {
+  return await fetch('/?index', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
