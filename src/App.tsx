@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Separator } from '@/components/ui/separator'
 
@@ -18,8 +18,15 @@ const INIT_CONRIBUTIONS: ContributionType[] = [
 function App() {
   const [shareId, setShareId] = useState<string>()
 
-  const [contributions, setContributions] =
-    useState<ContributionType[]>(INIT_CONRIBUTIONS)
+  const [contributions, setContributions] = useState<ContributionType[]>([])
+
+  useEffect(() => {
+    const url = new URL(window.location.href)
+    const id = url.searchParams.get('data')
+    if (id) {
+      fetchSharedContributions(id)
+    }
+  }, [])
 
   const contributors = [...new Set(contributions.map((c) => c.contributor))]
   const summary = calculateSummary(contributions, contributors)
@@ -38,6 +45,16 @@ function App() {
 
   const addContribution = (contribution: ContributionType) => {
     setContributions([contribution, ...contributions])
+  }
+
+  async function fetchSharedContributions(id: string) {
+    fetch(`/share?data=${id}`)
+      .then((res) => (res.status === 200 ? res.json() : null))
+      .then((contributions) => {
+        if (contributions) {
+          setContributions(contributions)
+        }
+      })
   }
 
   return (
@@ -105,11 +122,11 @@ function App() {
 
 function getShareLink(id: string) {
   const { protocol, hostname, port } = window.location
-  return `${protocol}//${hostname}${port ? `:${port}` : ''}/${id}`
+  return `${protocol}//${hostname}${port ? `:${port}` : ''}?data=${id}`
 }
 
 async function share(contributions: ContributionType[]) {
-  return await fetch('/share', {
+  return fetch('/share', {
     method: 'POST',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify({ contributions }),

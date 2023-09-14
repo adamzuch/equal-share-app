@@ -19,7 +19,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
   const kv = context.env.EQUAL_SHARE_KV
 
   const url = new URL(context.request.url)
-  const id = url.searchParams.get('id')
+  const id = url.searchParams.get('data')
 
   if (!id) {
     return new Response('Bad request', { status: 400 })
@@ -31,7 +31,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
       return new Response('Not found', { status: 404 })
     }
 
-    return new Response(JSON.parse(contributions), { status: 200 })
+    return new Response(contributions, { status: 200 })
   } catch (err) {
     console.error(err)
     return new Response('Something went wrong', { status: 500 })
@@ -53,7 +53,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const id = nanoid()
     const contributions = contributionsSchema.parse(body.contributions)
 
-    await kv.put(id, JSON.stringify(contributions), { expirationTtl: 60 })
+    await kv.put(id, JSON.stringify(contributions), { expirationTtl: 60 * 10 })
 
     return new Response(JSON.stringify({ id }), { status: 201 })
   } catch (err) {
