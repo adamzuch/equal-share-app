@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { nanoid } from 'nanoid'
 
 import { Separator } from '@/components/ui/separator'
 
@@ -112,14 +111,8 @@ function getShareLink(id: string) {
 async function share(contributions: ContributionType[]) {
   return await fetch('/share', {
     method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      id: nanoid(),
-      contributions,
-    }),
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    body: JSON.stringify({ contributions }),
   })
 }
 

@@ -1,47 +1,61 @@
+import { nanoid } from 'nanoid'
+import { z } from 'zod'
+
 interface Env {
   EQUAL_SHARE_KV: KVNamespace
 }
 
-type ContributionType = {
-  amount: number
-  contributor: string
-  description: string
-}
+export const contributionsSchema = z.array(
+  z.object({
+    amount: z.number().nonnegative(),
+    contributor: z.string().nonempty(),
+    description: z.string(),
+  })
+)
 
-type ShareRequest = {
-  id: string
-  contributions: ContributionType[]
-}
+type Contribution = z.infer<typeof contributionsSchema>[0]
 
-type ShareResponse = {
-  id: string
+export const onRequestGet: PagesFunction<Env> = async (context) => {
+  const kv = context.env.EQUAL_SHARE_KV
+
+  const url = new URL(context.request.url)
+  const id = url.searchParams.get('id')
+
+  if (!id) {
+    return new Response('Bad request', { status: 400 })
+  }
+
+  try {
+    const contributions = await kv.get(id)
+    if (!contributions) {
+      return new Response('Not found', { status: 404 })
+    }
+
+    return new Response(JSON.parse(contributions), { status: 200 })
+  } catch (err) {
+    console.error(err)
+    return new Response('Something went wrong', { status: 500 })
+  }
 }
 
 export const onRequestPost: PagesFunction<Env> = async (context) => {
   const kv = context.env.EQUAL_SHARE_KV
 
-  const { id, contributions } = (await context.request.json()) as ShareRequest
-
-  if (!id) {
-    return new Response('Missing id', { status: 400 })
+  const body = (await context.request.json()) as {
+    contributions?: Contribution[]
   }
-  if (!contributions) {
-    return new Response('Missing contributions', { status: 400 })
+
+  if (!body || !body?.contributions) {
+    return new Response('Bad request', { status: 400 })
   }
 
   try {
+    const id = nanoid()
+    const contributions = contributionsSchema.parse(body.contributions)
+
     await kv.put(id, JSON.stringify(contributions), { expirationTtl: 60 })
 
-    const list = await kv.list()
-
-    for (const key of list.keys) {
-      const value = await kv.get(key.name)
-      console.log(key, value)
-    }
-
-    const response: ShareResponse = { id }
-
-    return new Response(JSON.stringify(response), { status: 201 })
+    return new Response(JSON.stringify({ id }), { status: 201 })
   } catch (err) {
     console.error(err)
     return new Response('Something went wrong', { status: 500 })
