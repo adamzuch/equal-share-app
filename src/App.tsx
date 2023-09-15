@@ -22,9 +22,9 @@ function App() {
 
   useEffect(() => {
     const url = new URL(window.location.href)
-    const id = url.searchParams.get('data')
+    const id = url.searchParams.get('share')
     if (id) {
-      fetchSharedContributions(id)
+      fetchContributions(id)
     }
   }, [])
 
@@ -47,8 +47,8 @@ function App() {
     setContributions([contribution, ...contributions])
   }
 
-  async function fetchSharedContributions(id: string) {
-    fetch(`/share?data=${id}`)
+  async function fetchContributions(id: string) {
+    fetch(`/share?id=${id}`)
       .then((res) => (res.status === 200 ? res.json() : null))
       .then((contributions) => {
         if (contributions) {
@@ -91,10 +91,11 @@ function App() {
                 <Button
                   disabled={shareId !== undefined}
                   onClick={async () => {
-                    const res = await (await share(contributions))?.json()
-
-                    if (res?.id && typeof res.id === 'string') {
-                      setShareId(res.id)
+                    const id = await (await share(contributions)).text()
+                    console.log(id)
+                    if (id && typeof id === 'string') {
+                      setShareId(id)
+                      navigator.clipboard.writeText(generateShareLink(id))
                     }
                   }}
                 >
@@ -106,9 +107,9 @@ function App() {
                   <a
                     className={buttonVariants({ variant: 'link' })}
                     target="blank"
-                    href={getShareLink(shareId)}
+                    href={generateShareLink(shareId)}
                   >
-                    {getShareLink(shareId)}
+                    {generateShareLink(shareId)}
                   </a>
                 </div>
               )}
@@ -120,9 +121,9 @@ function App() {
   )
 }
 
-function getShareLink(id: string) {
+function generateShareLink(id: string) {
   const { protocol, hostname, port } = window.location
-  return `${protocol}//${hostname}${port ? `:${port}` : ''}?data=${id}`
+  return `${protocol}//${hostname}${port ? `:${port}` : ''}/?share=${id}`
 }
 
 async function share(contributions: ContributionType[]) {
