@@ -53,7 +53,9 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const id = nanoid()
     const contributions = contributionsSchema.parse(body.contributions)
 
-    await kv.put(id, JSON.stringify(contributions), { expirationTtl: 60 * 10 })
+    await kv.put(id, JSON.stringify(contributions), {
+      expirationTtl: 86_400, // 24 hours
+    })
 
     return new Response(id, { status: 201 })
   } catch (err) {
