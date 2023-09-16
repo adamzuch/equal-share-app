@@ -8,11 +8,6 @@ import { Contributions } from '@/components/Contributions'
 import { Header } from '@/components/Header'
 import { ShareControls } from './components/ShareControls'
 
-const INIT_CONRIBUTIONS: ContributionType[] = [
-  { contributor: 'Alice', amount: 100, description: '' },
-  { contributor: 'Bob', amount: 50, description: '' },
-]
-
 function App() {
   useEffect(() => {
     const url = new URL(window.location.href)
@@ -23,8 +18,7 @@ function App() {
   }, [])
 
   const [initialContributions, setInitialContributions] = useState<string>()
-  const [contributions, setContributions] =
-    useState<ContributionType[]>(INIT_CONRIBUTIONS)
+  const [contributions, setContributions] = useState<ContributionType[]>([])
 
   const canShare =
     initialContributions === undefined ||

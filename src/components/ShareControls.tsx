@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { useToast } from '@/components/ui/use-toast'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -19,11 +20,13 @@ export function ShareControls({
   contributions: ContributionType[]
 }) {
   const [shareId, setShareId] = useState<string>()
-  const [, setError] = useState<Error>()
+  const [error, setError] = useState<Error>()
   const [loading, setLoading] = useState<boolean>(false)
 
   const shareLink =
     shareId !== undefined ? generateShareLink(shareId) : undefined
+
+  const { toast } = useToast()
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
@@ -45,11 +48,18 @@ export function ShareControls({
           copyToClipboard(generateShareLink(id))
         }
       })
-      .catch((err) => {
-        setError(err)
-      })
+      .catch((err) => setError(err))
       .finally(() => {
-        setTimeout(() => setLoading(false), 500)
+        setTimeout(() => {
+          setLoading(false)
+          if (error) {
+            toast({
+              variant: 'destructive',
+              title: 'Uh oh! Something went wrong',
+              description: 'An error occurred creating the shareable link.',
+            })
+          }
+        }, 500)
       })
   }
 
@@ -74,7 +84,7 @@ export function ShareControls({
             <CardDescription>
               A shareable link has been copied to your clipboard. Anyone with
               the link can view this page, but if changes are made they will be
-              saved under a new link. It will expire after 24 hours.
+              saved under a new link. Links expire after 24 hours.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -82,7 +92,14 @@ export function ShareControls({
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => copyToClipboard(shareLink)}
+                onClick={() => {
+                  copyToClipboard(shareLink)
+
+                  toast({
+                    title: 'Link copied to clipboard',
+                    description: 'Share away!',
+                  })
+                }}
               >
                 <Copy className="h-4 w-4" />
               </Button>
