@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
 
-import { Separator } from '@/components/ui/separator'
-
 import { ContributionType, calculateSummary } from '@/lib/calculate-summary'
 import { NewContribution } from '@/components/forms/NewContribution'
 import { ThemeProvider } from '@/components/ThemeProvider'
@@ -61,40 +59,32 @@ function App() {
     <ThemeProvider defaultTheme="system">
       <div className="flex flex-col items-center font-work-sans">
         <div className="w-full md:w-[768px] px-6 py-12 space-y-12">
-          <div className="space-y-12">
-            <Header />
+          <Header />
 
-            <div className="flex flex-col gap-12">
-              <div className="w-full">
-                <NewContribution
-                  contributors={contributors}
-                  onSubmit={addContribution}
-                />
-              </div>
+          <NewContribution
+            contributors={contributors}
+            onSubmit={addContribution}
+          />
 
-              {contributions.length > 0 ? (
-                <Contributions
-                  contributions={contributions}
-                  contributors={contributors}
-                  updateContribution={updateContribution}
-                  deleteContribution={deleteContribution}
-                />
-              ) : null}
-            </div>
-          </div>
+          {contributions.length === 0 ? null : (
+            <Contributions
+              contributions={contributions}
+              contributors={contributors}
+              updateContribution={updateContribution}
+              deleteContribution={deleteContribution}
+            />
+          )}
 
-          {summary !== null ? (
+          {summary === null ? null : (
             <>
-              <Separator />
               <Summary contributors={contributors} {...summary} />
-
               <ShareControls
                 contributions={contributions}
                 shareId={shareId}
                 setShareId={setShareId}
               />
             </>
-          ) : null}
+          )}
         </div>
       </div>
     </ThemeProvider>
