@@ -14,9 +14,6 @@ const INIT_CONRIBUTIONS: ContributionType[] = [
 ]
 
 function App() {
-  const [contributions, setContributions] = useState<ContributionType[]>([])
-  const [shareId, setShareId] = useState<string>()
-
   useEffect(() => {
     const url = new URL(window.location.href)
     const id = url.searchParams.get('share')
@@ -25,8 +22,28 @@ function App() {
     }
   }, [])
 
+  const [initialContributions, setInitialContributions] = useState<string>()
+  const [contributions, setContributions] =
+    useState<ContributionType[]>(INIT_CONRIBUTIONS)
+
+  const canShare =
+    initialContributions === undefined ||
+    initialContributions !== JSON.stringify(contributions)
+
   const contributors = [...new Set(contributions.map((c) => c.contributor))]
+
   const summary = calculateSummary(contributions, contributors)
+
+  const fetchContributions = async (id: string) => {
+    fetch(`/share?id=${id}`)
+      .then((res) => (res.status === 200 ? res.json() : null))
+      .then((contributions) => {
+        if (contributions) {
+          setContributions(contributions)
+          setInitialContributions(JSON.stringify(contributions))
+        }
+      })
+  }
 
   const updateContribution = (i: number, contribution: ContributionType) => {
     setContributions([
@@ -42,16 +59,6 @@ function App() {
 
   const addContribution = (contribution: ContributionType) => {
     setContributions([contribution, ...contributions])
-  }
-
-  async function fetchContributions(id: string) {
-    fetch(`/share?id=${id}`)
-      .then((res) => (res.status === 200 ? res.json() : null))
-      .then((contributions) => {
-        if (contributions) {
-          setContributions(contributions)
-        }
-      })
   }
 
   return (
@@ -74,16 +81,13 @@ function App() {
             />
           )}
 
-          {summary === null ? null : (
-            <>
-              <Summary contributors={contributors} {...summary} />
-              <ShareControls
-                contributions={contributions}
-                shareId={shareId}
-                setShareId={setShareId}
-              />
-            </>
-          )}
+          {summary !== null ? (
+            <Summary contributors={contributors} {...summary} />
+          ) : null}
+
+          {summary !== null && canShare ? (
+            <ShareControls contributions={contributions} />
+          ) : null}
         </div>
       </div>
     </ThemeProvider>

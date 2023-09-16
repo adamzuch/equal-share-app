@@ -1,51 +1,67 @@
-import { Button, buttonVariants } from '@/components/ui/button'
-import type { ContributionType } from '@/lib/calculate-summary'
-import { cn } from '@/lib/utils'
-import { Check, Copy, Share } from 'lucide-react'
+import { useState } from 'react'
+import { Check, Copy, Loader2, Share } from 'lucide-react'
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from './ui/card'
+} from '@/components/ui/card'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+
+import type { ContributionType } from '@/lib/calculate-summary'
 
 export function ShareControls({
   contributions,
-  shareId,
-  setShareId,
 }: {
   contributions: ContributionType[]
-  shareId?: string
-  setShareId: React.Dispatch<React.SetStateAction<string | undefined>>
 }) {
+  const [shareId, setShareId] = useState<string>()
+  const [, setError] = useState<Error>()
+  const [loading, setLoading] = useState<boolean>(false)
+
   const shareLink =
     shareId !== undefined ? generateShareLink(shareId) : undefined
 
-  async function shareContributions() {
-    const body = JSON.stringify({ contributions })
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+  }
 
-    fetch('/share', { method: 'POST', body })
+  const shareContributions = async () => {
+    setTimeout(() => setLoading(true), 100)
+
+    fetch('/share', { method: 'POST', body: JSON.stringify({ contributions }) })
       .then((res) => {
         if (res.status !== 201) {
-          throw new Error('Failed to share contributions')
+          throw new Error()
         }
         return res.text()
       })
       .then((id) => {
         if (id && typeof id === 'string') {
           setShareId(id)
-          navigator.clipboard.writeText(generateShareLink(id))
+          copyToClipboard(generateShareLink(id))
         }
+      })
+      .catch((err) => {
+        setError(err)
+      })
+      .finally(() => {
+        setTimeout(() => setLoading(false), 500)
       })
   }
 
   return (
     <div className="w-full flex flex-col gap-12 items-center">
-      {shareLink ? undefined : (
-        <Button onClick={shareContributions}>
-          Share
-          <Share className="ml-2 h-4 w-4" />
+      {shareLink ? undefined : loading ? (
+        <Button disabled={loading} onClick={shareContributions}>
+          Saving... <Loader2 className="animate-spin ml-2 h-4 w-4" />
+        </Button>
+      ) : (
+        <Button disabled={loading} onClick={shareContributions}>
+          Share <Share className="ml-2 h-4 w-4" />
         </Button>
       )}
 
@@ -66,7 +82,7 @@ export function ShareControls({
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => navigator.clipboard.writeText(shareLink)}
+                onClick={() => copyToClipboard(shareLink)}
               >
                 <Copy className="h-4 w-4" />
               </Button>
