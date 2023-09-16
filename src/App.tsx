@@ -14,8 +14,7 @@ const INIT_CONRIBUTIONS: ContributionType[] = [
 ]
 
 function App() {
-  const [contributions, setContributions] =
-    useState<ContributionType[]>(INIT_CONRIBUTIONS)
+  const [contributions, setContributions] = useState<ContributionType[]>([])
   const [shareId, setShareId] = useState<string>()
 
   useEffect(() => {

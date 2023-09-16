@@ -1,7 +1,7 @@
 import { Button, buttonVariants } from '@/components/ui/button'
 import type { ContributionType } from '@/lib/calculate-summary'
 import { cn } from '@/lib/utils'
-import { Copy, Share } from 'lucide-react'
+import { Check, Copy, Share } from 'lucide-react'
 import {
   Card,
   CardContent,
@@ -44,7 +44,7 @@ export function ShareControls({
     <div className="w-full flex flex-col gap-12 items-center">
       {shareLink ? undefined : (
         <Button onClick={shareContributions}>
-          Save and share
+          Share
           <Share className="ml-2 h-4 w-4" />
         </Button>
       )}
@@ -52,13 +52,13 @@ export function ShareControls({
       {shareLink ? (
         <Card className="w-full">
           <CardHeader className="">
-            <CardTitle className="font-montserrat tracking-wide text-xl font-bold ">
-              Saved!
+            <CardTitle className="font-montserrat tracking-wide text-xl font-bold flex items-center">
+              Link created <Check className="ml-2" />
             </CardTitle>
             <CardDescription>
               A shareable link has been copied to your clipboard. Anyone with
               the link can view this page, but if changes are made they will be
-              saved under a new link.
+              saved under a new link. It will expire after 24 hours.
             </CardDescription>
           </CardHeader>
           <CardContent>
