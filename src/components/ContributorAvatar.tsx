@@ -7,10 +7,10 @@ export function ContributorAvatar({ contributor }: { contributor: string }) {
   return (
     <Avatar>
       <AvatarFallback
-        className="text-[#020817] transition-colors"
+        className="text-[#020817] transition-colors group"
         style={{ backgroundColor: iconColor }}
       >
-        <Icon />
+        <Icon className="group-hover:animate-bounce-better animate-none duration-1000" />
       </AvatarFallback>
     </Avatar>
   )

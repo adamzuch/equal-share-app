@@ -1,6 +1,4 @@
-import { useState } from 'react'
-
-import { Separator } from '@/components/ui/separator'
+import { useEffect, useState } from 'react'
 
 import { ContributionType, calculateSummary } from '@/lib/calculate-summary'
 import { NewContribution } from '@/components/forms/NewContribution'
@@ -8,12 +6,38 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import { Summary } from '@/components/Summary'
 import { Contributions } from '@/components/Contributions'
 import { Header } from '@/components/Header'
+import { ShareControls } from './components/ShareControls'
 
 function App() {
+  useEffect(() => {
+    const url = new URL(window.location.href)
+    const id = url.searchParams.get('share')
+    if (id) {
+      fetchContributions(id)
+    }
+  }, [])
+
+  const [initialContributions, setInitialContributions] = useState<string>()
   const [contributions, setContributions] = useState<ContributionType[]>([])
+
+  const canShare =
+    initialContributions === undefined ||
+    initialContributions !== JSON.stringify(contributions)
+
   const contributors = [...new Set(contributions.map((c) => c.contributor))]
 
   const summary = calculateSummary(contributions, contributors)
+
+  const fetchContributions = async (id: string) => {
+    fetch(`/share?id=${id}`)
+      .then((res) => (res.status === 200 ? res.json() : null))
+      .then((contributions) => {
+        if (contributions) {
+          setContributions(contributions)
+          setInitialContributions(JSON.stringify(contributions))
+        }
+      })
+  }
 
   const updateContribution = (i: number, contribution: ContributionType) => {
     setContributions([
@@ -35,33 +59,28 @@ function App() {
     <ThemeProvider defaultTheme="system">
       <div className="flex flex-col items-center font-work-sans">
         <div className="w-full md:w-[768px] px-6 py-12 space-y-12">
-          <div className="space-y-12">
-            <Header />
+          <Header />
 
-            <div className="flex flex-col gap-12">
-              <div className="w-full">
-                <NewContribution
-                  contributors={contributors}
-                  onSubmit={addContribution}
-                />
-              </div>
+          <NewContribution
+            contributors={contributors}
+            onSubmit={addContribution}
+          />
 
-              {contributions.length > 0 ? (
-                <Contributions
-                  contributions={contributions}
-                  contributors={contributors}
-                  updateContribution={updateContribution}
-                  deleteContribution={deleteContribution}
-                />
-              ) : null}
-            </div>
-          </div>
+          {contributions.length === 0 ? null : (
+            <Contributions
+              contributions={contributions}
+              contributors={contributors}
+              updateContribution={updateContribution}
+              deleteContribution={deleteContribution}
+            />
+          )}
 
           {summary !== null ? (
-            <>
-              <Separator />
-              <Summary contributors={contributors} {...summary} />
-            </>
+            <Summary contributors={contributors} {...summary} />
+          ) : null}
+
+          {summary !== null && canShare ? (
+            <ShareControls contributions={contributions} />
           ) : null}
         </div>
       </div>
