@@ -8,7 +8,7 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import { Summary } from '@/components/Summary'
 import { Contributions } from '@/components/Contributions'
 import { Header } from '@/components/Header'
-import { Button, buttonVariants } from './components/ui/button'
+import { ShareControls } from './components/ShareControls'
 
 const INIT_CONRIBUTIONS: ContributionType[] = [
   { contributor: 'Alice', amount: 100, description: '' },
@@ -16,9 +16,9 @@ const INIT_CONRIBUTIONS: ContributionType[] = [
 ]
 
 function App() {
+  const [contributions, setContributions] =
+    useState<ContributionType[]>(INIT_CONRIBUTIONS)
   const [shareId, setShareId] = useState<string>()
-
-  const [contributions, setContributions] = useState<ContributionType[]>([])
 
   useEffect(() => {
     const url = new URL(window.location.href)
@@ -87,51 +87,18 @@ function App() {
             <>
               <Separator />
               <Summary contributors={contributors} {...summary} />
-              {shareId === undefined ? (
-                <Button
-                  disabled={shareId !== undefined}
-                  onClick={async () => {
-                    const id = await (await share(contributions)).text()
-                    console.log(id)
-                    if (id && typeof id === 'string') {
-                      setShareId(id)
-                      navigator.clipboard.writeText(generateShareLink(id))
-                    }
-                  }}
-                >
-                  Share!
-                </Button>
-              ) : (
-                <div>
-                  Link to share:{' '}
-                  <a
-                    className={buttonVariants({ variant: 'link' })}
-                    target="blank"
-                    href={generateShareLink(shareId)}
-                  >
-                    {generateShareLink(shareId)}
-                  </a>
-                </div>
-              )}
+
+              <ShareControls
+                contributions={contributions}
+                shareId={shareId}
+                setShareId={setShareId}
+              />
             </>
           ) : null}
         </div>
       </div>
     </ThemeProvider>
   )
-}
-
-function generateShareLink(id: string) {
-  const { protocol, hostname, port } = window.location
-  return `${protocol}//${hostname}${port ? `:${port}` : ''}/?share=${id}`
-}
-
-async function share(contributions: ContributionType[]) {
-  return fetch('/share', {
-    method: 'POST',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-    body: JSON.stringify({ contributions }),
-  })
 }
 
 export default App
