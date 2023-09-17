@@ -1,9 +1,12 @@
 import {
+  Bird,
   Cat,
   Dog,
   Fish,
   LucideIcon,
   Rabbit,
+  Rat,
+  Shell,
   Snail,
   Squirrel,
   Turtle,
@@ -17,20 +20,22 @@ const AVATAR_ICONS: LucideIcon[] = [
   Snail,
   Squirrel,
   Turtle,
+  Bird,
+  Rat,
+  Shell,
 ]
 
-const AVATAR_COLORS: string[] = [
-  // Lighter shades
-  '#AEC7E8', // Light Blue
-  '#FFBB78', // Light Orange
-  '#98DF8A', // Light Green
-  '#FF9896', // Light Red
-  '#C5B0D5', // Light Purple
-  '#C49C94', // Light Brown
-  '#F7B6D2', // Light Pink
-  '#C7C7C7', // Light Gray
-  '#DBDB8D', // Light Lime
-  '#9EDAE5', // Light Cyan
+const AVATAR_COLORS = [
+  '#FBF8CC',
+  '#FDE4CF',
+  '#FFCFD2',
+  '#F1C0E8',
+  '#CFBAF0',
+  '#A3C4F3',
+  '#90DBF4',
+  '#8EECF5',
+  '#98F5E1',
+  '#B9FBC0',
 ]
 
 export function getAvatarIcon(name: string): LucideIcon {
@@ -41,6 +46,13 @@ export function getAvatarIcon(name: string): LucideIcon {
 export function getAvatarColor(name: string): string {
   const index = cyrb53(name, 123) % AVATAR_COLORS.length
   return AVATAR_COLORS[index]
+}
+
+export function getAvatarBorderColor(name: string): string {
+  const avatarColor = getAvatarColor(name)
+  const colors = AVATAR_COLORS.filter((color) => color !== avatarColor)
+  const index = cyrb53(name, 246) % colors.length
+  return colors[index]
 }
 
 /*
