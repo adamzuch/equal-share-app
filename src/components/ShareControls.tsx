@@ -90,14 +90,14 @@ export function ShareControls({
 
       {!canShare && shareLink ? (
         <Card className="w-full border-none">
-          <CardHeader>
+          <CardHeader className="px-0">
             <CardDescription>
               A shareable link has been copied to your clipboard. Anyone with
-              the link can view this page, but if changes are made they will
-              need to be saved under a new link. Links expire after 24 hours.
+              the link can view this page, but additional changes will need to
+              be saved under a new link. Links expire after 24 hours.
             </CardDescription>
           </CardHeader>
-          <CardContent className="flex items-center justify-center gap-2">
+          <CardContent className="flex items-center justify-center gap-2 px-0">
             <a
               href={shareLink}
               className={cn(buttonVariants({ variant: 'link' }), 'px-0')}

@@ -9,6 +9,7 @@ export function Footer() {
         <a
           className={cn(buttonVariants({ variant: 'link' }), 'px-0')}
           href="https://github.com/adamzuch"
+          target="_blank"
         >
           adamzuch
         </a>
@@ -17,13 +18,15 @@ export function Footer() {
       <a
         className={cn(buttonVariants({ variant: 'link' }), 'px-0')}
         href="https://github.com/adamzuch/equal-share-app"
+        target="_blank"
       >
         Source code on GitHub
       </a>
       |
       <a
         className={cn(buttonVariants({ variant: 'link' }), 'px-0')}
-        href="https://github.com/adamzuch/equal-share-app"
+        href="https://forms.gle/MFTkJ6KBjpKXa4d68"
+        target="_blank"
       >
         Submit feedback
       </a>
