@@ -17,12 +17,8 @@ function App() {
     }
   }, [])
 
-  const [initialContributions, setInitialContributions] = useState<string>()
+  const [savedContributions, setSavedContributions] = useState<string>()
   const [contributions, setContributions] = useState<ContributionType[]>([])
-
-  const canShare =
-    initialContributions === undefined ||
-    initialContributions !== JSON.stringify(contributions)
 
   const contributors = [...new Set(contributions.map((c) => c.contributor))]
 
@@ -34,7 +30,7 @@ function App() {
       .then((contributions) => {
         if (contributions) {
           setContributions(contributions)
-          setInitialContributions(JSON.stringify(contributions))
+          setSavedContributions(JSON.stringify(contributions))
         }
       })
   }
@@ -79,8 +75,12 @@ function App() {
             <Summary contributors={contributors} {...summary} />
           ) : null}
 
-          {summary !== null && canShare ? (
-            <ShareControls contributions={contributions} />
+          {summary !== null ? (
+            <ShareControls
+              contributions={contributions}
+              savedContributions={savedContributions}
+              setSavedContributions={setSavedContributions}
+            />
           ) : null}
         </div>
       </div>
