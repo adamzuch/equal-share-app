@@ -123,5 +123,7 @@ export function ShareControls({
 
 function generateShareLink(id: string) {
   const { protocol, hostname, port } = window.location
-  return `${protocol}//${hostname}${port ? `:${port}` : ''}/?share=${id}`
+  return `${protocol}//${hostname}${
+    port ? `:${port}` : ''
+  }/?contributions=${id}`
 }
