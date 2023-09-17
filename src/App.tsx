@@ -6,12 +6,13 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import { Summary } from '@/components/Summary'
 import { Contributions } from '@/components/Contributions'
 import { Header } from '@/components/Header'
-import { ShareControls } from './components/ShareControls'
+import { ShareControls } from '@/components/ShareControls'
+import { Footer } from '@/components/Footer'
 
 function App() {
   useEffect(() => {
     const url = new URL(window.location.href)
-    const id = url.searchParams.get('share')
+    const id = url.searchParams.get('contributions')
     if (id) {
       fetchContributions(id)
     }
@@ -53,8 +54,8 @@ function App() {
 
   return (
     <ThemeProvider defaultTheme="system">
-      <div className="flex flex-col items-center font-work-sans">
-        <div className="w-full md:w-[768px] px-6 py-12 space-y-12">
+      <div className="h-screen flex flex-col items-center font-work-sans">
+        <div className="w-full flex-1 md:w-[768px] px-6 py-12 space-y-12">
           <Header />
 
           <NewContribution
@@ -83,6 +84,7 @@ function App() {
             />
           ) : null}
         </div>
+        <Footer />
       </div>
     </ThemeProvider>
   )
