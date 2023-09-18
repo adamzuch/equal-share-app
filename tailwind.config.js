@@ -18,7 +18,7 @@ module.exports = {
     extend: {
       fontFamily: {
         'work-sans': ['Work Sans', 'sans-serif'],
-        montserrat: ['Montserrat', 'sans-serif'],
+        montserrat: ['Montserrat Alternates', 'sans-serif'],
       },
       colors: {
         border: 'hsl(var(--border))',

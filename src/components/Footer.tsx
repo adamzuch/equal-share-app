@@ -7,7 +7,7 @@ export function Footer() {
       <span>
         Created by{' '}
         <a
-          className={cn(buttonVariants({ variant: 'link' }), 'px-0')}
+          className={cn(buttonVariants({ variant: 'link' }), 'p-0')}
           href="https://github.com/adamzuch"
           target="_blank"
         >
@@ -16,7 +16,7 @@ export function Footer() {
       </span>
       |
       <a
-        className={cn(buttonVariants({ variant: 'link' }), 'px-0')}
+        className={cn(buttonVariants({ variant: 'link' }), 'p-0')}
         href="https://github.com/adamzuch/equal-share-app"
         target="_blank"
       >
@@ -24,7 +24,7 @@ export function Footer() {
       </a>
       |
       <a
-        className={cn(buttonVariants({ variant: 'link' }), 'px-0')}
+        className={cn(buttonVariants({ variant: 'link' }), 'p-0')}
         href="https://forms.gle/MFTkJ6KBjpKXa4d68"
         target="_blank"
       >
