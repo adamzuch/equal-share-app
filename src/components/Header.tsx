@@ -3,11 +3,11 @@ import { ThemeToggle } from './ThemeToggle'
 
 export function Header() {
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       <div className="flex items-center justify-between gap-6">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Logo size={24} />
-          <h1 className="text-3xl font-bold font-montserrat-alt">
+          <h1 className="text-3xl font-bold font-montserrat-alt tracking-wide">
             equal share
           </h1>
         </div>
