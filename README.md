@@ -1,6 +1,6 @@
 # equal share
 
-A web app for splitting group expenses and settling debts live now at [equal-share-app.pages.dev](https://equal-share-app.pages.dev/).
+A web app for splitting group expenses and settling debts live now at [equalshare.me](https://equalshare.me).
 
 ### Technologies used
 - React (w/ Vite)
