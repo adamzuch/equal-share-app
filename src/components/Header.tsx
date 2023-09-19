@@ -17,7 +17,8 @@ export function Header() {
         <ThemeToggle />
       </div>
       <p className="text-sm">
-        Effortlessly split group expenses and instantly settle debts.{' '}
+        Effortlessly split group expenses and instantly settle debts for free –
+        no login required.{' '}
         <a
           href="?contributions=example"
           className={cn(
