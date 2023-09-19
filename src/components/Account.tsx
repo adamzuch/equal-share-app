@@ -33,7 +33,7 @@ export function Account({
   return (
     <Card className="p-3 flex items-center">
       <div className="flex flex-row justify-between items-center gap-3 w-full">
-        <div className="text-sm text-muted-foreground">#{rank}</div>
+        <div className="text-sm text-muted-foreground min-w-5">#{rank}</div>
         <ContributorAvatar contributor={contributor} />
         <div className="flex-1 min-w-16">
           <AccountDescription

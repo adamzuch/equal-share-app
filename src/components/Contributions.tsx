@@ -23,9 +23,7 @@ export function Contributions({
         Contributions
       </span>
 
-      <div
-        className={cn('grid grid-cols-1 lg:grid-cols-2 gap-3 auto-rows-[1fr]')}
-      >
+      <div className={cn('grid grid-cols-1 gap-3 auto-rows-[1fr]')}>
         {contributions.map((contribution, i) => (
           <Contribution
             contributors={contributors}
