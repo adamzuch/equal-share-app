@@ -34,6 +34,7 @@ export function Summary({
 
   return (
     <div className="flex flex-col items-center space-y-12">
+      <Separator />
       <div className="text-2xl text-center ">
         <span className="font-semibold">{total.format()}</span> paid by{' '}
         <span className="font-semibold">{contributors.length} people</span>{' '}
