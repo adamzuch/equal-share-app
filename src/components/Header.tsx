@@ -1,5 +1,8 @@
-import { Logo } from './Logo'
-import { ThemeToggle } from './ThemeToggle'
+import { cn } from '@/lib/utils'
+import { buttonVariants } from '@/components/ui/button'
+
+import { Logo } from '@/components/Logo'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 export function Header() {
   return (
@@ -14,7 +17,18 @@ export function Header() {
         <ThemeToggle />
       </div>
       <p className="text-sm">
-        Effortlessly split group expenses and instantly settle debts.
+        Effortlessly split group expenses and instantly settle debts.{' '}
+        <a
+          href="?contributions=example"
+          className={cn(
+            buttonVariants({ variant: 'link' }),
+            'p-0 h-fit inline-flex items-center gap-1'
+          )}
+          target="_blank"
+        >
+          See an example
+        </a>
+        .
       </p>
     </div>
   )
