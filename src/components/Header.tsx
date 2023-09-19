@@ -7,7 +7,7 @@ export function Header() {
       <div className="flex items-center justify-between gap-6">
         <div className="flex items-center gap-3">
           <Logo size={24} />
-          <h1 className="text-3xl font-bold font-montserrat-alt tracking-wide">
+          <h1 className="text-3xl font-bold font-montserrat tracking-wide">
             equal share
           </h1>
         </div>
