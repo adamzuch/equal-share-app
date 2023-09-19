@@ -3,11 +3,11 @@ import { cn } from '@/lib/utils'
 
 export function Footer() {
   return (
-    <div className="w-full text-sm gap-3 flex justify-center items-center bg-secondary text-secondary-foreground p-3">
+    <div className="w-full text-sm gap-3 flex justify-center text-center items-center bg-secondary text-secondary-foreground p-3">
       <span>
         Created by{' '}
         <a
-          className={cn(buttonVariants({ variant: 'link' }), 'p-0')}
+          className={cn(buttonVariants({ variant: 'link' }), 'p-0 h-fit')}
           href="https://github.com/adamzuch"
           target="_blank"
         >
@@ -16,7 +16,7 @@ export function Footer() {
       </span>
       |
       <a
-        className={cn(buttonVariants({ variant: 'link' }), 'p-0')}
+        className={cn(buttonVariants({ variant: 'link' }), 'p-0 h-fit')}
         href="https://github.com/adamzuch/equal-share-app"
         target="_blank"
       >
@@ -24,7 +24,7 @@ export function Footer() {
       </a>
       |
       <a
-        className={cn(buttonVariants({ variant: 'link' }), 'p-0')}
+        className={cn(buttonVariants({ variant: 'link' }), 'p-0 h-fit')}
         href="https://forms.gle/MFTkJ6KBjpKXa4d68"
         target="_blank"
       >

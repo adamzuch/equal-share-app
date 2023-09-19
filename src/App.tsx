@@ -55,7 +55,7 @@ function App() {
   return (
     <ThemeProvider defaultTheme="system">
       <div className="h-screen flex flex-col items-center font-work-sans">
-        <div className="w-full flex-1 md:w-[768px] px-6 py-12 space-y-12">
+        <div className="w-full flex-1 md:w-[768px] px-6 pt-6 pb-12 space-y-12">
           <Header />
 
           <NewContribution
