@@ -24,3 +24,8 @@ A web app for splitting group expenses and settling debts. Live now at [equalsha
 ## Running locally
 1. `npm install`
 2. `npm run dev`
+
+
+___
+
+This app is the successor to the work I did on [you-owe-me](https://github.com/adamzuch/you-owe-me) when first learning React.
