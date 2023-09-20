@@ -37,8 +37,8 @@ export function ShareControls({
 
   const { toast } = useToast()
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text)
+  const copyToClipboard = async (text: string) => {
+    await navigator.clipboard.writeText(text)
   }
 
   const shareContributions = async () => {
