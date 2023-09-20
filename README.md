@@ -5,13 +5,14 @@ A web app for splitting group expenses and settling debts. Live now at [equalsha
 
 ## Why?
 
-Calculating who owes who for shared expenses is tedious (and hard) — **equal share does it for you, easily.**
-
-Signing up, logging in, or downloading an app is tedious (your friends won't do it) — **equal share is online. Share results via hyperlink.**
-
-Paying for a service sucks — **equal share is free :)**
+- Calculating who owes who for shared expenses is hard and tedious.
+- Logging in to a service, or downloading an app is tedious (your family/friends won't do it).
+- Paying for a service sucks.
 
 
+#### equal share handles the hard stuff for free, with no login or download required. Share results instantly via hyperlink.
+
+---
 
 ## Technologies used
 - React (w/ Vite)
