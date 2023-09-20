@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Loader2 } from 'lucide-react'
 
 import { ContributionType, calculateSummary } from '@/lib/calculate-summary'
 import { NewContribution } from '@/components/forms/NewContribution'
@@ -18,6 +19,8 @@ function App() {
     }
   }, [])
 
+  const [loading, setLoading] = useState<boolean>(false)
+
   const [savedContributions, setSavedContributions] = useState<string>()
   const [contributions, setContributions] = useState<ContributionType[]>([])
 
@@ -26,6 +29,7 @@ function App() {
   const summary = calculateSummary(contributions, contributors)
 
   const fetchContributions = async (id: string) => {
+    setLoading(true)
     fetch(`/share?id=${id}`)
       .then((res) => (res.status === 200 ? res.json() : null))
       .then((contributions) => {
@@ -34,6 +38,7 @@ function App() {
           setSavedContributions(JSON.stringify(contributions))
         }
       })
+      .finally(() => setLoading(false))
   }
 
   const updateContribution = (i: number, contribution: ContributionType) => {
@@ -62,6 +67,13 @@ function App() {
             contributors={contributors}
             onSubmit={addContribution}
           />
+
+          {loading && savedContributions === undefined ? (
+            <span className="flex flex-col gap-3 items-center justify-center">
+              <Loader2 className="animate-spin" />
+              Loading contributions...
+            </span>
+          ) : null}
 
           {contributions.length === 0 ? null : (
             <Contributions
