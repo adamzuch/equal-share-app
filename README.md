@@ -3,16 +3,11 @@
 
 A web app for splitting group expenses and settling debts. Live now at [equalshare.me](https://equalshare.me).
 
-## Why?
+equal share was created to address a real-world need for a minimal and intuitive expense splitting app which doesn’t require the user to log in or download.
 
-- Calculating who owes who for shared expenses is hard and tedious.
-- Logging in to a service, or downloading an app is tedious (your family/friends won't do it).
-- Paying for a service sucks.
+Users can add expenses, see a clear breakdown, and share results with a simple hyperlink (for free!).
 
 
-#### equal share handles the hard stuff for free, with no login or download required. Share results instantly via hyperlink.
-
----
 
 ## Technologies used
 - React (w/ Vite)
